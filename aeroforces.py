@@ -3,17 +3,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 data = open("MainWing_a=0.00_v=10.00ms.txt")
-xpos = []
+ypos = []
 force = []
+ints = []
 count = 0
 
 for line in data.readlines():
     count += 1
-    if count > 21:
-        items = line.split('   ')
-        print(items)
-        force.append(items[0])
-        #xpos.append(items[3])
+    items = line.split(' ')
+    #print(items)
+    ints.append(count)
+    ypos.append(float(items[0]))
+    force.append(float(items[3]))
 
-plt.plot(xpos,force)
+print(ypos)
+
+plt.plot(ints,force)
 plt.show()
