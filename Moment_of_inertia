@@ -3,13 +3,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
 
+
 thickness_chord = 0.14
 start_point = 0.288
 end_point = 0.9
 left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
-span = np.arange(0,12.82,0.01)
+span = np.arange(0,12.81,0.01)
+t_wall = 0.002
+E = 68.94757*10**9
 
 
 
@@ -84,9 +87,9 @@ def moment_of_inertia(t_wall):
 I = moment_of_inertia(0.002)
 
 
-a,b,c,d = np.polyfit(span,I,3)
+a,b,c,d,e = np.polyfit(span,I,4)
 
-I_2 = a*span**3 + b*span**2 + c*span + d
+I_2 = a*span**4 + b*span**3 + c*span**2 + d*span + e
 
 plt.plot(span, I)
 plt.plot(span, I_2)
