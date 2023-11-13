@@ -1,0 +1,102 @@
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy as sp
+
+thickness_chord = 0.14
+start_point = 0.288
+end_point = 0.9
+left_side = 0.052700 + 0.052900
+right_side = 0.051600 + 0.028600
+height = end_point - start_point
+span = np.arange(0,12.82,0.01)
+t_wall = 0.002
+E = 68.94757*10**9
+
+
+
+def plot_trapezoid(base1, base2, height):
+    """
+    Plot a trapezoid with given base1, base2, and height.
+    """
+    # Define the vertices of the trapezoid
+    x = [0, base1, base2, 0]
+    y = [0, 0, height, height]
+
+    # Connect the vertices to form the trapezoid
+    plt.plot(x + [x[0]], y + [y[0]], 'b-')
+
+    # Set labels and title
+    plt.xlabel('X-axis')
+    plt.ylabel('Y-axis')
+    plt.title('Trapezoid')
+
+    # Display the plot
+    plt.show()
+
+
+plot_trapezoid(left_side, right_side, height)
+
+def chord_length(y):
+    return (-0.2472*y + 4.52)
+
+def area(c,t_wall):
+    t = thickness_chord*c
+    diff = t - 0.14
+    left = left_side + diff
+    right = right_side + diff
+    height = 0.9*c - 0.288*c
+    bottom = np.sqrt((left-right)**2+height**2)
+    A1 = height*t_wall
+    A2 = left*t_wall
+    A3 = right*t_wall
+    A4 = bottom*t_wall
+    return A1,A2,A3,A4,height,left,right,bottom
+
+
+def moment_of_inertia(t_wall):
+    
+    chords = chord_length(span)
+    moment_of_inertia = []
+    
+    for i in chords:
+        
+        Atop,Aleft,Aright,Abottom,height,left,right,bottom = area(i,t_wall)
+        
+        c_x = (left**2 + right**2 + left*right)/(3*(left+right))
+        c_y = (left+2*right)/(3*(left+right))*height
+        
+        distance_top = c_x
+        distance_bottom = left - np.sqrt(bottom/2/(1+(height/(left-right))**2)) - c_x
+        distance_left = left/2 - c_x
+        distance_right = right/2 - c_x
+        
+        I_top = 1/12*height*t_wall**3 + Atop*distance_top**2
+        I_left = 1/12*t_wall*left**3 + Aleft*distance_left**2
+        I_right = 1/12*t_wall*right**3 + Aright*distance_right**2
+        I_bottom = 1/12*t_wall*bottom*((t_wall**2*(height/bottom)**2)+bottom**2*((left-right)/bottom)**2)+Abottom*distance_bottom**2
+        
+        I_tot = I_top + I_left + I_right + I_bottom
+        
+        moment_of_inertia.append(I_tot)
+
+    return moment_of_inertia
+
+
+I = moment_of_inertia(0.002)
+
+
+a,b,c,d = np.polyfit(span,I,3)
+
+I_2 = a*span**3 + b*span**2 + c*span + d
+
+plt.plot(span, I)
+plt.plot(span, I_2)
+plt.xlabel('y')
+plt.ylabel('I')
+plt.title('Span-wise moment of Inertia')
+
+plt.show()
+
+
+    
