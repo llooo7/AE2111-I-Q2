@@ -10,8 +10,6 @@ left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
 span = np.arange(0,12.82,0.01)
-t_wall = 0.002
-E = 68.94757*10**9
 
 
 
