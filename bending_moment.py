@@ -1,28 +1,50 @@
-from scipy.integrate import quad 
+from scipy.integrate import quad
 from matplotlib import pyplot as plt
 
-L = 28*100
-
-def s(x): 
-  return 3.0*x*x + 1.0   # example, input the shear stress function when it is done
-
-def integrate(j):
-    return quad(s, j, L) 
+L = 28 * 100
 
 
+def w(x):
+    return 100
 
 
-xtab = []
-ytab = []
+def integrate(func, j):
+    return quad(func, j, L)
 
-for i in range(0, L):
-    xtab.append(i/100)
-    I, err = integrate(i/100)
-    ytab.append(I)
 
+x1tab = []
+y1tab = []
+x2tab = []
+y2tab = []
+
+
+def s(x):
+    return -integrate(w, 0)[0] + integrate(w, x)[0]
+
+
+def plot_s():
+    for i in range(0, L):
+        x1tab.append(i / 100)
+        y1tab.append(s(i / 100))
+
+
+def m(o):
+    return integrate(s, 0)[0] - integrate(s, o)[0]
+
+
+def plot_m():
+    for p in range(0, L):
+        x2tab.append(p / 100)
+        y2tab.append(m(p / 100))
+
+
+plot_s()
+plot_m()
 fig, ax = plt.subplots()
-ax.plot(xtab, ytab, color="black")
-#plt.ylim(-0.5, 0.5)
+ax.plot(x1tab, y1tab, color="black")
+ax.plot(x2tab, y2tab, color="red")
+# plt.ylim(-0.5, 0.5)
 plt.title("Bending moment diagram")
 
 plt.show()
+
