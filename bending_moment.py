@@ -1,44 +1,52 @@
 from scipy.integrate import quad
 from matplotlib import pyplot as plt
+from scipy.interpolate import interp1d
+import numpy as np
 
-L = 28 * 10
-x1tab, y1tab, x2tab, y2tab = [], [], [], []
-
-def integrate(func, j):
-    return quad(func, j, L)
+L = int(12.815 * 1000)
+xtab, ytab, x1tab, y1tab, x2tab, y2tab = [], [], [], [], [], []
 
 def w(x):
-    return 10
+    return 1/10000*(-0.3344*x**5 + 10.009*x**4 - 108.58*x**3 + 499.98*x**2 - 827.24*x + 4039.3)
 
 def plot_w():
     for i in range(0, L):
-        x1tab.append(i / 10)
-        y1tab.append((w(i / 10))) 
+        xtab.append(i / 1000)
+        ytab.append(w(i / 1000))
 
 def s(x):
-    return integrate(w, 0)[0] - integrate(w, x)[0]
+    result, _ = quad(w, 0, x)
+    return result
+
 
 def s2(x):
-    return s(x)-s(L/10)
+    return s(x)-s_react
 
 def plot_s():
     for i in range(0, L):
-        x1tab.append(i / 10)
-        y1tab.append((s2(i / 10))) 
+        x1tab.append(i / 1000)
+        y1tab.append(s2(i / 1000))
 
-def m(o):
-    return integrate(s2, 0)[0] - integrate(s2, o)[0]
+def m(x):
+    result, _ = quad(s2, 0, x)
+    return result
 
 def plot_m():
     for p in range(0, L):
-        x2tab.append(p / 10)
-        y2tab.append((m(p / 10)-m(L/10)))
+        x2tab.append(p / 1000)
+        y2tab.append(m(p / 1000) - m_react)
 
+plot_w()
+s_react = s(L/1000)
 plot_s()
+m_react = m(L/1000)
 plot_m()
-fig, ax = plt.subplots(2, 2, layout="constrained")
-ax[0][0].set_title('Shear Stress')
-ax[0][1].set_title('Bending Moment')
-ax[0][0].plot(x1tab, y1tab)
-ax[0][1].plot(x2tab, y2tab)
-plt.show()  
+
+fig, ax = plt.subplots(2, 2, constrained_layout=True)
+ax[0][0].set_title('Load distribution')
+ax[0][1].set_title('Shear Stress')
+ax[1][0].set_title('Bending Moment')
+ax[0][0].plot(np.arange(0, 12.815, 0.1), [w(i) for i in np.arange(0, 12.815, 0.1)])
+ax[0][1].plot(x1tab, y1tab)
+ax[1][0].plot(x2tab, y2tab)
+plt.show()
