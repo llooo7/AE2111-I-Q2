@@ -2,12 +2,16 @@ from scipy.integrate import quad
 from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 import numpy as np
+import aeroforces
 
 L = int(12.815 * 1000)
 xtab, ytab, x1tab, y1tab, x2tab, y2tab = [], [], [], [], [], []
 
 def w(x):
-    return 1/10000*(-0.3344*x**5 + 10.009*x**4 - 108.58*x**3 + 499.98*x**2 - 827.24*x + 4039.3)
+    returnValue = 0
+    for i in range(len(aeroforces.curveFit())):
+        returnValue += x**(len(aeroforces.curveFit())-i) * aeroforces.curveFit()[i]
+    #return 1/10000*(-0.3344*x**5 + 10.009*x**4 - 108.58*x**3 + 499.98*x**2 - 827.24*x + 4039.3)
 
 def plot_w():
     for i in range(0, L):
