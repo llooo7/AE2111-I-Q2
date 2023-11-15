@@ -40,11 +40,10 @@ def plot_m():
 
 plot_s()
 plot_m()
-fig, ax = plt.subplots()
-ax.plot(x1tab, y1tab, color="black")
-ax.plot(x2tab, y2tab, color="red")
+fig, (ax0, ax1) = plt.subplots(2, 1 , layout="constrained")
+ax0.plot(x1tab, y1tab, color="black", label='Shear Stress')
+ax1.plot(x2tab, y2tab, color="red", label='Bending Moment')
 # plt.ylim(-0.5, 0.5)
 plt.title("Bending moment diagram")
 
 plt.show()
-
