@@ -1,131 +1,41 @@
-import os
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy as sp
+from scipy.integrate import quad
+from matplotlib import pyplot as plt
 
+L = 28 * 100
+x1tab, y1tab, x2tab, y2tab = [], [], [], []
 
-thickness_chord = 0.14
-start_point = 0.288
-end_point = 0.9
-left_side = 0.052700 + 0.052900
-right_side = 0.051600 + 0.028600
-height = end_point - start_point
-span = np.arange(0,12.81,0.01)
-t_spar = 0.005
-t_skin = 0.002
-A_str = 0.0008
-n_str = 7
-E = 68.94757*10**9
+def w(x):
+    return 100
 
+def integrate(func, j):
+    return quad(func, j, L)
 
+def s(x):
+    return integrate(w, 0)[0] - integrate(w, x)[0]
 
-def plot_trapezoid(base1, base2, height):
-    """
-    Plot a trapezoid with given base1, base2, and height.
-    """
-    # Define the vertices of the trapezoid
-    x = [0, base1, base2, 0]
-    y = [0, 0, height, height]
+def s2(x):
+    return s(x)-s(L/100)
 
-    # Connect the vertices to form the trapezoid
-    plt.plot(x + [x[0]], y + [y[0]], 'b-')
+def plot_s():
+    for i in range(0, L):
+        x1tab.append(i / 100)
+        y1tab.append((s2(i / 100))) 
 
-    # Set labels and title
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
-    plt.title('Trapezoid')
+def m(o):
+    return integrate(s2, 0)[0] - integrate(s2, o)[0]
 
-    # Display the plot
-    plt.show()
+def plot_m():
+    for p in range(0, L):
+        x2tab.append(p / 100)
+        y2tab.append((m(p / 100)-m(L/100)))
 
+plot_s()
+plot_m()
+fig, ax = plt.subplots(1, 2, layout="constrained")
+ax[0].set_title('Shear Stress')
+ax[1].set_title('Bending Moment')
+ax[0].plot(x1tab, y1tab, color="black")
+ax[1].plot(x2tab, y2tab, color="red")
+plt.title("Bending moment diagram")
 
-plot_trapezoid(left_side, right_side, height)
-
-def chord_length(y):
-    return (-0.2472*y + 4.52)
-
-def stringer(left,right,top,bottom,n_str):    
-    str_top = [0]
-    str_bottom = [0]
-    
-    space_top = top/(n_str-1)
-    space_bottom = (left-right)/(n_str-1)
-    
-    for i in range(n_str-1):
-       x_top = space_top + str_top[-1]
-       y_bottom = space_bottom + str_bottom[-1]
-       str_top.append(x_top)
-       str_bottom.append(y_bottom)
-    
-    return str_top,str_bottom
-    
-  
-
-def area(c,t_spar,t_skin):
-    t = thickness_chord*c
-    diff = t - 0.14
-    left = left_side + diff
-    right = right_side + diff
-    height = 0.9*c - 0.288*c
-    bottom = np.sqrt((left-right)**2+height**2)
-    A1 = height*t_skin
-    A2 = left*t_spar
-    A3 = right*t_spar
-    A4 = bottom*t_skin
-    return A1,A2,A3,A4,height,left,right,bottom
-
-
-def moment_of_inertia(A_str,n_str,t_spar,t_skin):
-    
-    chords = chord_length(span)
-    moment_of_inertia = []
-    
-    for i in chords:
-        
-        Atop,Aleft,Aright,Abottom,height,left,right,bottom = area(i,t_spar,t_skin)
-        
-        c_x = (left**2 + right**2 + left*right)/(3*(left+right))
-        c_y = (left+2*right)/(3*(left+right))*height
-        
-        distance_top = c_x
-        distance_bottom = left - np.sqrt((bottom/2)**2/(1+(height/(left-right))**2)) - c_x
-        distance_left = left/2 - c_x
-        distance_right = right/2 - c_x
-        t,b = stringer(left,right,height,bottom,n_str)
-        
-        for j in b:
-            I_str_bottom = []
-            j = c_x - j
-            I_str_bottom.append(A_str*j**2)
-            
-        I_str_bottom = sum(I_str_bottom)
-        I_str_top = n_str*A_str*distance_top**2
-        I_top = 1/12*height*t_skin**3 + Atop*distance_top**2
-        I_left = 1/12*t_spar*left**3 + Aleft*distance_left**2
-        I_right = 1/12*t_spar*right**3 + Aright*distance_right**2
-        I_bottom = 1/12*t_skin*bottom*((t_skin**2*(height/bottom)**2)+bottom**2*((left-right)/bottom)**2)+Abottom*distance_bottom**2
-        
-        
-        I_tot = I_top + I_left + I_right + I_bottom + I_str_bottom + I_str_top
-        
-        moment_of_inertia.append(I_tot)
-
-    return moment_of_inertia
-
-
-I = moment_of_inertia(A_str,n_str,t_spar,t_skin)
-
-
-a,b,c,d,e = np.polyfit(span,I,4)
-
-I_2 = a*span**4 + b*span**3 + c*span**2 + d*span + e
-
-plt.plot(span, I)
-plt.plot(span, I_2)
-plt.xlabel('y')
-plt.ylabel('I')
-plt.title('Span-wise moment of Inertia')
-
-plt.show()
-
-
+plt.show()  
