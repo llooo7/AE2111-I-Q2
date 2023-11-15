@@ -30,7 +30,7 @@ f10 = sp.interpolate.interp1d(ypos[1],force[1],kind='quadratic',fill_value="extr
 def q(h,v,S,CL):
     return 0.5 * float(isa.getDensity(h)) * v * v * S * CL
 
-def aeroForce(x,v = 10,a = 0,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
+def aeroForce(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
     return q(h,v,wing.chord(x),f0(x)) + 1/10 * q(h,v,wing.chord(x),f10(x))
 
 ###Graph for debugging purposes
