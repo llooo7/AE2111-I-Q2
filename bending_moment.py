@@ -19,7 +19,7 @@ def s2(x):
 def plot_s():
     for i in range(0, L):
         x1tab.append(i / 100)
-        y1tab.append((s2(i / 100)))
+        y1tab.append((s2(i / 100))) 
 
 def m(o):
     return integrate(s2, 0)[0] - integrate(s2, o)[0]
