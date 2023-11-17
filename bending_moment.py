@@ -1,56 +1,59 @@
-from scipy.integrate import quad
-from matplotlib import pyplot as plt
-from scipy.interpolate import interp1d
+import os
+import matplotlib.pyplot as plt
 import numpy as np
-import aeroforces
+import scipy as sp
+from scipy import interpolate
+import isa
+import wing
 
-L = int(12.815 * 1000)
-xtab, ytab, x1tab, y1tab, x2tab, y2tab = [], [], [], [], [], []
+data = [open("MainWing_a=0.00_v=10.00ms.txt"), open("MainWing_a=10.00_v=10.00ms.txt")]
+aoas = [0,10]
+ypos0 = np.array([])
+lcoe0 = np.array([])
+ypos1 = np.array([])
+lcoe1 = np.array([])
 
-def w(x):
-    returnValue = 0
-    for i in range(len(aeroforces.curveFit())):
-        returnValue += x**(len(aeroforces.curveFit())-i) * aeroforces.curveFit()[i]
-    #return 1/10000*(-0.3344*x**5 + 10.009*x**4 - 108.58*x**3 + 499.98*x**2 - 827.24*x + 4039.3)
+i = 0
+for datapoint in data:
+    #dcoe.append([])
+    for line in datapoint.readlines():
+        items = line.split(' ')
+        if float(items[0]) > 0:
+            if i == 0:
+                ypos0 = np.append(ypos0, float(items[0]))
+                lcoe0 = np.append(lcoe0, float(items[3]))
+                #dcoe[i].append(float(items[3]))
+            elif i == 1:
+                ypos1 = np.append(ypos1, float(items[0]))
+                lcoe1 = np.append(lcoe1, float(items[3]))
+                #dcoe[i].append(float(items[3]))
+    datapoint.close()
+    i += 1
 
-def plot_w():
-    for i in range(0, L):
-        xtab.append(i / 1000)
-        ytab.append(w(i / 1000))
 
-def s(x):
-    result, _ = quad(w, 0, x)
-    return result
+l0 = interpolate.InterpolatedUnivariateSpline(ypos0,lcoe0,k=3)
+shear = l0.antiderivative(1)
+
+x_shear___ = np.array([])
+y_shear___ = np.array([])
+for i in range(0, 12815):
+    x_shear___ = np.append(x_shear___, i/1000)
+    y_shear___ = np.append(y_shear___, shear(i/1000) - shear(12.815))
+
+shear0 = interpolate.InterpolatedUnivariateSpline(x_shear___,y_shear___,k=3)
+moment = shear0.antiderivative(1)
+
+x_moment___ = np.array([])
+y_moment___ = np.array([])
+for i in range(0, 12815):
+    x_moment___ = np.append(x_moment___, i/1000)
+    y_moment___ = np.append(y_moment___, moment(i/1000) - moment(12.815))
 
 
-def s2(x):
-    return s(x)-s_react
-
-def plot_s():
-    for i in range(0, L):
-        x1tab.append(i / 1000)
-        y1tab.append(s2(i / 1000))
-
-def m(x):
-    result, _ = quad(s2, 0, x)
-    return result
-
-def plot_m():
-    for p in range(0, L):
-        x2tab.append(p / 1000)
-        y2tab.append(m(p / 1000) - m_react)
-
-plot_w()
-s_react = s(L/1000)
-plot_s()
-m_react = m(L/1000)
-plot_m()
 
 fig, ax = plt.subplots(2, 2, constrained_layout=True)
-ax[0][0].set_title('Load distribution')
-ax[0][1].set_title('Shear Stress')
-ax[1][0].set_title('Bending Moment')
-ax[0][0].plot(np.arange(0, 12.815, 0.1), [w(i) for i in np.arange(0, 12.815, 0.1)])
-ax[0][1].plot(x1tab, y1tab)
-ax[1][0].plot(x2tab, y2tab)
+ax[0][0].plot(ypos0, lcoe0, "o", label="Data")
+ax[0][0].plot(ypos0, lcoe0, "--", label="Interpolated Spline")
+ax[0][1].plot(x_shear___, y_shear___, label="Shear stress")
+ax[1][0].plot(x_moment___, y_moment___, label="Bending moment")
 plt.show()
