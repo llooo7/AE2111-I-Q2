@@ -31,29 +31,38 @@ for datapoint in data:
     i += 1
 
 
-l0 = interpolate.InterpolatedUnivariateSpline(ypos0,lcoe0,k=3)
-shear = l0.antiderivative(1)
+def integrate_spline(ypos, lcoe):
+    global x_shear___, y_shear___, x_moment___, y_moment___
+    l0 = interpolate.InterpolatedUnivariateSpline(ypos,lcoe,k=3)
+    shear = l0.antiderivative(1)
 
-x_shear___ = np.array([])
-y_shear___ = np.array([])
-for i in range(0, 12815):
-    x_shear___ = np.append(x_shear___, i/1000)
-    y_shear___ = np.append(y_shear___, shear(i/1000) - shear(12.815))
+    x_shear___ = np.array([])
+    y_shear___ = np.array([])
+    for i in range(0, 12815):
+        x_shear___ = np.append(x_shear___, i/1000)
+        y_shear___ = np.append(y_shear___, shear(i/1000) - shear(12.815))
 
-shear0 = interpolate.InterpolatedUnivariateSpline(x_shear___,y_shear___,k=3)
-moment = shear0.antiderivative(1)
+    shear0 = interpolate.InterpolatedUnivariateSpline(x_shear___,y_shear___,k=3)
+    moment = shear0.antiderivative(1)
 
-x_moment___ = np.array([])
-y_moment___ = np.array([])
-for i in range(0, 12815):
-    x_moment___ = np.append(x_moment___, i/1000)
-    y_moment___ = np.append(y_moment___, moment(i/1000) - moment(12.815))
+    x_moment___ = np.array([])
+    y_moment___ = np.array([])
+    for i in range(0, 12815):
+        x_moment___ = np.append(x_moment___, i/1000)
+        y_moment___ = np.append(y_moment___, moment(i/1000) - moment(12.815))
 
 
-
-fig, ax = plt.subplots(2, 2, constrained_layout=True)
-ax[0][0].plot(ypos0, lcoe0, "o", label="Data")
-ax[0][0].plot(ypos0, lcoe0, "--", label="Interpolated Spline")
-ax[0][1].plot(x_shear___, y_shear___, label="Shear stress")
-ax[1][0].plot(x_moment___, y_moment___, label="Bending moment")
-plt.show()
+def plot():
+    fig, ax = plt.subplots(2, 3, constrained_layout=True)
+    integrate_spline(ypos0, lcoe0)
+    ax[0][0].plot(ypos0, lcoe0, "o")
+    ax[0][0].plot(ypos0, lcoe0, "--", label="Interpolated Spline 1")
+    ax[0][1].plot(x_shear___, y_shear___, label="Shear stress 1")
+    ax[0][2].plot(x_moment___, y_moment___, label="Bending moment 1")
+    integrate_spline(ypos1, lcoe1)
+    ax[1][0].plot(ypos1, lcoe1, "o")
+    ax[1][0].plot(ypos1, lcoe1, "--", label="Interpolated Spline 2")
+    ax[1][1].plot(x_shear___, y_shear___, label="Shear stress 2")
+    ax[1][2].plot(x_moment___, y_moment___, label="Bending moment 2")
+    plt.show()
+plot()
