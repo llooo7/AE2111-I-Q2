@@ -25,11 +25,10 @@ Lambda_c2 = 0.453399865
 thrust = 96500
 dz = 0.05*chord(engine_ypos)+1.35/2
 
-# Flight conditions
-h = 1
+n = 1
+mass = 1
 v = 100
-n = 2
-weight = 10
+h = 1
 
 # Read files
 i = 0
@@ -61,7 +60,7 @@ def torque_dist(x):
 def t(x):
     return x
 
-def integrate_spline(ypos, lcoe):
+def integrate_spline(ypos, lcoe, n=1, mass=320000, v=10, h=1):
     global x_load___, y_load___, x_load___other, y_load___other, x_shear___, y_shear___, x_moment___, y_moment___, x_torque___, y_torque___
     l0 = interpolate.InterpolatedUnivariateSpline(ypos,lcoe,k=5)
     x_load___, y_load___, x_load___other, y_load___other  = np.array([]), np.array([]), np.array([]), np.array([])
@@ -112,16 +111,16 @@ def integrate_spline(ypos, lcoe):
             y_torque___ = np.append(y_torque___, torque(i/1000) - torque(L))
 
 
-def plot():
+def plot(n, mass, v, h):
     fig, ax = plt.subplots(2, 4, constrained_layout=True)
-    integrate_spline(ypos0, lcoe0)
+    integrate_spline(ypos0, lcoe0, n, mass, v, h)
     #ax[0][0].plot(ypos0, lcoe0, "o")
     #ax[0][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
     ax[0][0].plot(x_load___, y_load___, label="Interpolated Spline 1")
     ax[0][1].plot(x_shear___, y_shear___, label="Shear stress 1")
     ax[0][2].plot(x_moment___, y_moment___, label="Bending moment 1")
     ax[0][3].plot(x_torque___, y_torque___, label="Torque 1")
-    integrate_spline(ypos1, lcoe1)
+    integrate_spline(ypos1, lcoe1, n, mass, v, h)
     #ax[1][0].plot(ypos1, lcoe1, "o")
     #ax[1][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
     ax[1][0].plot(x_load___, y_load___, label="Interpolated Spline 2")
@@ -131,4 +130,4 @@ def plot():
     plt.show()
 
 # MAIN    
-plot()
+plot(n, mass, v, h)
