@@ -30,8 +30,8 @@ for datapoint in data:
 l0 = sp.interpolate.interp1d(ypos[0],lcoe[0],kind='quadratic',fill_value="extrapolate")
 l10 = sp.interpolate.interp1d(ypos[1],lcoe[1],kind='quadratic',fill_value="extrapolate")
 
-c40 = sp.interpolate.interp1d(c4m[0],c4m[0],kind='quadratic',fill_value="extrapolate")
-c410 = sp.interpolate.interp1d(c4m[1],c4m[1],kind='quadratic',fill_value="extrapolate")
+c40 = sp.interpolate.interp1d(ypos[0],c4m[0],kind='quadratic',fill_value="extrapolate")
+c410 = sp.interpolate.interp1d(ypos[1],c4m[1],kind='quadratic',fill_value="extrapolate")
 
 def pgApprox(h,v):
     return np.sqrt()    
@@ -41,11 +41,9 @@ def q(h,v,S,CL):
 
 def normalAeroForce(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
     return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958)
-    #return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x)))
 
 def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
-    return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958)
-    #return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x)))
+    return q(h,v,wing.chord(x),c40(x)) + 1/10 * q(h,v,wing.chord(x),c410(x))
 
 def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce):
     xVal = []
@@ -55,8 +53,8 @@ def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce):
         yVal.append(function(i/10))
     
     return np.polyfit(xVal,yVal,3)
-    #print(np.polyfit(xVal,yVal,3))
-    #plt.plot(xVal,yVal)
-    #plt.show()
+    print(np.polyfit(xVal,yVal,3))
+    plt.plot(xVal,yVal)
+    plt.show()
 
 #curveFit(function = c4moment)
