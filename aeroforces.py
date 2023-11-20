@@ -44,8 +44,16 @@ def pgApprox(h,v):
 def q(h,v,S,CL):
     return 0.5 * float(isa.getDensity(h)) * v * v * S * CL
 
+def specialAbs(a,b):
+    return np.sqrt(pow(a,2) + pow(b,2))
+
+def aoaNormalize(val0,val1,angle):
+    return ( val0 + angle * 0.1 * val1 ) / np.cos(a / 57.2958)
+
 def normalAeroForce(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
-    return np.sqrt(pow((q(h,v,wing.chord(x),l0(x)) + a * 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958),2) + pow((q(h,v,wing.chord(x),d0(x)) + a * 1/10 * q(h,v,wing.chord(x),d10(x))) / np.cos(a / 57.2958),2))
+    normalLift = aoaNormalize(q(h,v,wing.chord(x),l0(x)), q(h,v,wing.chord(x),l10(x)),a)
+    normalDrag = aoaNormalize(q(h,v,wing.chord(x),d0(x)),q(h,v,wing.chord(x),d10(x)),a) 
+    return specialAbs(normalLift,normalDrag)
 
 def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
     return q(h,v,wing.chord(x),c40(x)) + a * 1/10 * q(h,v,wing.chord(x),c410(x))
