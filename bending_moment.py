@@ -2,6 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
+from math import sin, cos
 from scipy import interpolate
 import isa
 import wing
@@ -10,15 +11,20 @@ data = [open("MainWing_a=0.00_v=10.00ms.txt"), open("MainWing_a=10.00_v=10.00ms.
 aoas = [0,10]
 ypos0, lcoe0, ypos1, lcoe1 = np.array([]), np.array([]), np.array([]), np.array([])
 
+# Aircraft parameters
 L = 12.815
-wing_weight = 100000
-engine_weight = 20000
+wing_weight = 2387.38 * 9.80655
+engine_weight = 2079 * 9.80655
 engine_ypos= 0.4 * L
 root_chord = 4.523337094
 tip_chord = 1.355080022
 Lambda_c2 = 0.453399865
-thrust = 11
-dz = 1
+thrust = 96500
+dz = 0.2
+
+# Flight conditions
+h = 1
+v = 100
 
 def chord(x):
     return (-root_chord+tip_chord)*x/L + root_chord
@@ -30,6 +36,9 @@ def wing_load_dist(x):
 
 def torque_dist(x):
     return -0.061807835*x + 1.130834274
+
+def t(x):
+    return x
 
 
 i = 0
@@ -58,10 +67,10 @@ def integrate_spline(ypos, lcoe):
     
     for i in range(0, int(L*1000)):
         if i == int(engine_ypos*1000):
-            y_load___ = np.append(y_load___, l0(i/1000) - engine_weight - wing_load_dist(i/1000))
+            y_load___ = np.append(y_load___, float(isa.getDensity(h))*l0(i/1000)/2*v*v*chord(i/1000) - engine_weight - wing_load_dist(i/1000))
             y_load___other = np.append(y_load___other, - engine_weight - wing_load_dist(i/1000))
         else:
-            y_load___ = np.append(y_load___, l0(i/1000) - wing_load_dist(i/1000))
+            y_load___ = np.append(y_load___, float(isa.getDensity(h))*l0(i/1000)/2*v*v*chord(i/1000) - wing_load_dist(i/1000))
             y_load___other = np.append(y_load___other, - wing_load_dist(i/1000))
         x_load___ = np.append(x_load___, i/1000)
 
@@ -83,11 +92,10 @@ def integrate_spline(ypos, lcoe):
     for i in range(0, int(L*1000)):
         x_moment___ = np.append(x_moment___, i/1000)
         y_moment___ = np.append(y_moment___, moment(i/1000) - moment(L))
-"""
     x_Ndy___, y_Ndy___ = np.array([]), np.array([])
     for i in range(0, int(L*1000)):
         x_Ndy___ = np.append(x_Ndy___, i/1000)
-        y_Ndy___ = np.append(y_Ndy___, y_load___(i/1000)*torque_dist(i/1000))
+        y_Ndy___ = np.append(y_Ndy___, load(i/1000)*torque_dist(i/1000) + t(i/1000))
 
     Ndy = interpolate.InterpolatedUnivariateSpline(x_Ndy___,y_Ndy___,k=5)
     torque = Ndy.antiderivative(1)
@@ -95,23 +103,27 @@ def integrate_spline(ypos, lcoe):
     x_torque___, y_torque___ = np.array([]), np.array([])
     for i in range(0, int(L*1000)):
         x_torque___ = np.append(x_torque___, i/1000)
-        y_torque___ = np.append(y_torque___, torque(i/1000) )
-"""
+        if i <= int(engine_ypos*1000):
+            y_torque___ = np.append(y_torque___, torque(i/1000) -thrust*dz*cos(Lambda_c2) - torque(L))
+        else:
+            y_torque___ = np.append(y_torque___, torque(i/1000) - torque(L))
 
 def plot():
     fig, ax = plt.subplots(2, 4, constrained_layout=True)
     integrate_spline(ypos0, lcoe0)
-    ax[0][0].plot(ypos0, lcoe0, "o")
-    ax[0][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
+    #ax[0][0].plot(ypos0, lcoe0, "o")
+    #ax[0][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
     ax[0][0].plot(x_load___, y_load___, label="Interpolated Spline 1")
     ax[0][1].plot(x_shear___, y_shear___, label="Shear stress 1")
     ax[0][2].plot(x_moment___, y_moment___, label="Bending moment 1")
+    ax[0][3].plot(x_torque___, y_torque___, label="Torque 1")
     integrate_spline(ypos1, lcoe1)
-    ax[1][0].plot(ypos1, lcoe1, "o")
-    ax[1][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
+    #ax[1][0].plot(ypos1, lcoe1, "o")
+    #ax[1][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
     ax[1][0].plot(x_load___, y_load___, label="Interpolated Spline 2")
     ax[1][1].plot(x_shear___, y_shear___, label="Shear stress 2")
     ax[1][2].plot(x_moment___, y_moment___, label="Bending moment 2")
+    ax[1][3].plot(x_torque___, y_torque___, label="Torque 2")
     plt.show()
 
 # MAIN    
