@@ -12,6 +12,7 @@ aoas = [0,10]
 ypos = [[],[]]  #spanwise position from center
 lcoe = [[],[]]  #lift coefficient
 c4m = [[],[]]  #drag coefficient, probably not relevant
+dcoe = [[],[]]
 
 i = 0
 for datapoint in data:
@@ -24,6 +25,7 @@ for datapoint in data:
             ypos[i].append(float(items[0]))
             lcoe[i].append(float(items[3]))
             c4m[i].append(float(items[7]))
+            dcoe[i].append(float(items[5]))
     datapoint.close()
     i += 1
 
@@ -33,6 +35,9 @@ l10 = sp.interpolate.interp1d(ypos[1],lcoe[1],kind='quadratic',fill_value="extra
 c40 = sp.interpolate.interp1d(ypos[0],c4m[0],kind='quadratic',fill_value="extrapolate")
 c410 = sp.interpolate.interp1d(ypos[1],c4m[1],kind='quadratic',fill_value="extrapolate")
 
+d0 = sp.interpolate.interp1d(ypos[0],dcoe[0],kind='quadratic',fill_value="extrapolate")
+d10 = sp.interpolate.interp1d(ypos[1],dcoe[1],kind='quadratic',fill_value="extrapolate")
+
 def pgApprox(h,v):
     return np.sqrt()    
 
@@ -40,10 +45,10 @@ def q(h,v,S,CL):
     return 0.5 * float(isa.getDensity(h)) * v * v * S * CL
 
 def normalAeroForce(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
-    return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958)
+    return sqrt(pow((q(h,v,wing.chord(x),l0(x)) + a * 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958),2),pow((q(h,v,wing.chord(x),d0(x)) + a * 1/10 * q(h,v,wing.chord(x),d10(x))) / np.cos(a / 57.2958),2))
 
 def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
-    return q(h,v,wing.chord(x),c40(x)) + 1/10 * q(h,v,wing.chord(x),c410(x))
+    return q(h,v,wing.chord(x),c40(x)) + a * 1/10 * q(h,v,wing.chord(x),c410(x))
 
 def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce):
     xVal = []
