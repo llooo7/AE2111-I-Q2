@@ -2,16 +2,19 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
-from math import sin, cos
+from math import cos
 from scipy import interpolate
 import isa
 import wing
+import aeroforces
 
 data = [open("MainWing_a=0.00_v=10.00ms.txt"), open("MainWing_a=10.00_v=10.00ms.txt")]
 aoas = [0,10]
 ypos0, lcoe0, ypos1, lcoe1 = np.array([]), np.array([]), np.array([]), np.array([])
 
 # Aircraft parameters
+def chord(x):
+    return (-root_chord+tip_chord)*x/L + root_chord
 L = 12.815
 wing_weight = 2387.38 * 9.80655
 engine_weight = 2079 * 9.80655
@@ -20,26 +23,13 @@ root_chord = 4.523337094
 tip_chord = 1.355080022
 Lambda_c2 = 0.453399865
 thrust = 96500
-dz = 0.2
+dz = 0.05*chord(engine_ypos)+1.35/2
 
 # Flight conditions
 h = 1
 v = 100
 
-def chord(x):
-    return (-root_chord+tip_chord)*x/L + root_chord
-
-
-def wing_load_dist(x):
-    wing_density = wing_weight/75.3316174
-    return wing_density*chord(x)
-
-def torque_dist(x):
-    return -0.061807835*x + 1.130834274
-
-def t(x):
-    return x
-
+# Read files
 
 i = 0
 for datapoint in data:
@@ -58,6 +48,17 @@ for datapoint in data:
     datapoint.close()
     i += 1
 
+# Load functions
+
+def wing_load_dist(x):
+    wing_density = wing_weight/75.3316174
+    return wing_density*chord(x)
+
+def torque_dist(x):
+    return -0.061807835*x + 1.130834274
+
+def t(x):
+    return x
 
 def integrate_spline(ypos, lcoe):
     global x_load___, y_load___, x_load___other, y_load___other, x_shear___, y_shear___, x_moment___, y_moment___, x_torque___, y_torque___
@@ -92,11 +93,12 @@ def integrate_spline(ypos, lcoe):
     for i in range(0, int(L*1000)):
         x_moment___ = np.append(x_moment___, i/1000)
         y_moment___ = np.append(y_moment___, moment(i/1000) - moment(L))
+
     x_Ndy___, y_Ndy___ = np.array([]), np.array([])
     for i in range(0, int(L*1000)):
         x_Ndy___ = np.append(x_Ndy___, i/1000)
-        y_Ndy___ = np.append(y_Ndy___, load(i/1000)*torque_dist(i/1000) + t(i/1000))
-
+        #y_Ndy___ = np.append(y_Ndy___, load(i/1000)*torque_dist(i/1000) + t(i/1000))
+        y_Ndy___ = np.append(y_Ndy___, aeroforces.c4moment(i/1000, 0, h)*v*v/2*chord(i/1000))
     Ndy = interpolate.InterpolatedUnivariateSpline(x_Ndy___,y_Ndy___,k=5)
     torque = Ndy.antiderivative(1)
 
@@ -107,6 +109,7 @@ def integrate_spline(ypos, lcoe):
             y_torque___ = np.append(y_torque___, torque(i/1000) -thrust*dz*cos(Lambda_c2) - torque(L))
         else:
             y_torque___ = np.append(y_torque___, torque(i/1000) - torque(L))
+
 
 def plot():
     fig, ax = plt.subplots(2, 4, constrained_layout=True)
