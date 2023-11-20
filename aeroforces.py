@@ -45,7 +45,7 @@ def q(h,v,S,CL):
     return 0.5 * float(isa.getDensity(h)) * v * v * S * CL
 
 def normalAeroForce(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
-    return sqrt(pow((q(h,v,wing.chord(x),l0(x)) + a * 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958),2),pow((q(h,v,wing.chord(x),d0(x)) + a * 1/10 * q(h,v,wing.chord(x),d10(x))) / np.cos(a / 57.2958),2))
+    return np.sqrt(pow((q(h,v,wing.chord(x),l0(x)) + a * 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958),2),pow((q(h,v,wing.chord(x),d0(x)) + a * 1/10 * q(h,v,wing.chord(x),d10(x))) / np.cos(a / 57.2958),2))
 
 def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
     return q(h,v,wing.chord(x),c40(x)) + a * 1/10 * q(h,v,wing.chord(x),c410(x))
