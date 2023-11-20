@@ -11,8 +11,8 @@ aoas = [0,10]
 ypos0, lcoe0, ypos1, lcoe1 = np.array([]), np.array([]), np.array([]), np.array([])
 
 L = 12.815
-wing_weight = 10
-engine_weight = 2
+wing_weight = 100000
+engine_weight = 20000
 engine_ypos= 0.4 * L
 root_chord = 4.523337094
 tip_chord = 1.355080022
@@ -83,7 +83,7 @@ def integrate_spline(ypos, lcoe):
     for i in range(0, int(L*1000)):
         x_moment___ = np.append(x_moment___, i/1000)
         y_moment___ = np.append(y_moment___, moment(i/1000) - moment(L))
-
+"""
     x_Ndy___, y_Ndy___ = np.array([]), np.array([])
     for i in range(0, int(L*1000)):
         x_Ndy___ = np.append(x_Ndy___, i/1000)
@@ -95,8 +95,8 @@ def integrate_spline(ypos, lcoe):
     x_torque___, y_torque___ = np.array([]), np.array([])
     for i in range(0, int(L*1000)):
         x_torque___ = np.append(x_torque___, i/1000)
-        y_torque___ = np.append(y_torque___, torque(i/1000) - a)
-
+        y_torque___ = np.append(y_torque___, torque(i/1000) )
+"""
 
 def plot():
     fig, ax = plt.subplots(2, 4, constrained_layout=True)
