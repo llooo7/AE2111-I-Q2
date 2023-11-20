@@ -102,6 +102,7 @@ def integrate_spline(n=1, mass=320000, v=10, h=1, a=0):
         x_Ndy___ = np.append(x_Ndy___, i/1000)
         #y_Ndy___ = np.append(y_Ndy___, load(i/1000)*torque_dist(i/1000) + t(i/1000))
         y_Ndy___ = np.append(y_Ndy___, aeroforces.c4moment(i/1000, 0, h)*v*v/2*chord(i/1000))
+
     Ndy = interpolate.InterpolatedUnivariateSpline(x_Ndy___,y_Ndy___,k=5)
     torque = Ndy.antiderivative(1)
 
@@ -141,11 +142,16 @@ def plot(n, mass, v, h, a):
     integrate_spline(n, mass, v, h, a)
     #ax[1][0].plot(ypos1, lcoe1, "o")
     #ax[1][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
+    ax[0].set_title("Load distribution diagram")
     ax[0].plot(x_load___, y_load___, label="Interpolated Spline 2")
+    ax[1].set_title("Shear stress diagram")
     ax[1].plot(x_shear___, y_shear___, label="Shear stress 2")
+    ax[2].set_title("Bending moment diagram")
     ax[2].plot(x_moment___, y_moment___, label="Bending moment 2")
+    ax[3].set_title("Torque diagram")
     ax[3].plot(x_torque___, y_torque___, label="Torque 2")
     plt.show()
+    return y_load___, y_shear___, y_moment___, y_torque___
 
 # MAIN    
 
