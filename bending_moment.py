@@ -16,7 +16,7 @@ ypos0, lcoe0, ypos1, lcoe1 = np.array([]), np.array([]), np.array([]), np.array(
 def chord(x):
     return (-root_chord+tip_chord)*x/L + root_chord
 L = 12.815
-wing_weight = 2387.38 * 9.80655
+wing_weight = 2387.38 * 9.80655 + 2635*9.80655
 engine_weight = 2079 * 9.80655
 engine_ypos= 0.4 * L
 root_chord = 4.523337094
@@ -28,9 +28,10 @@ dz = 0.05*chord(engine_ypos)+1.35/2
 # Flight conditions
 h = 1
 v = 100
+n = 2
+weight = 10
 
 # Read files
-
 i = 0
 for datapoint in data:
     #dcoe.append([])
@@ -68,10 +69,10 @@ def integrate_spline(ypos, lcoe):
     
     for i in range(0, int(L*1000)):
         if i == int(engine_ypos*1000):
-            y_load___ = np.append(y_load___, float(isa.getDensity(h))*l0(i/1000)/2*v*v*chord(i/1000) - engine_weight - wing_load_dist(i/1000))
+            y_load___ = np.append(y_load___, float(isa.getDensity(h))*l0(i/1000)/2*v*v*chord(i/1000) + n*(- engine_weight - wing_load_dist(i/1000)))
             y_load___other = np.append(y_load___other, - engine_weight - wing_load_dist(i/1000))
         else:
-            y_load___ = np.append(y_load___, float(isa.getDensity(h))*l0(i/1000)/2*v*v*chord(i/1000) - wing_load_dist(i/1000))
+            y_load___ = np.append(y_load___, float(isa.getDensity(h))*l0(i/1000)/2*v*v*chord(i/1000) + n*(- wing_load_dist(i/1000)))
             y_load___other = np.append(y_load___other, - wing_load_dist(i/1000))
         x_load___ = np.append(x_load___, i/1000)
 
