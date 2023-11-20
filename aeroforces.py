@@ -11,24 +11,27 @@ aoas = [0,10]
 
 ypos = [[],[]]  #spanwise position from center
 lcoe = [[],[]]  #lift coefficient
-#dcoe = [[],[]]  #drag coefficient, probably not relevant
+c4m = [[],[]]  #drag coefficient, probably not relevant
 
 i = 0
 for datapoint in data:
     ypos.append([])
     lcoe.append([])
-    #dcoe.append([])
+    c4m.append([])
     for line in datapoint.readlines():
         items = line.split(' ')
         if float(items[0]) > 0:
             ypos[i].append(float(items[0]))
             lcoe[i].append(float(items[3]))
-            #dcoe[i].append(float(items[3]))
+            c4m[i].append(float(items[7]))
     datapoint.close()
     i += 1
 
 l0 = sp.interpolate.interp1d(ypos[0],lcoe[0],kind='quadratic',fill_value="extrapolate")
 l10 = sp.interpolate.interp1d(ypos[1],lcoe[1],kind='quadratic',fill_value="extrapolate")
+
+c40 = sp.interpolate.interp1d(c4m[0],c4m[0],kind='quadratic',fill_value="extrapolate")
+c410 = sp.interpolate.interp1d(c4m[1],c4m[1],kind='quadratic',fill_value="extrapolate")
 
 def pgApprox(h,v):
     return np.sqrt()    
@@ -40,14 +43,20 @@ def normalAeroForce(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = veloci
     return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958)
     #return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x)))
 
-def curveFit(v = 10,a = 1.75,h = 0):
+def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
+    return 0.25*wing.chord(x)*((q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958))
+    #return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x)))
+
+def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce):
     xVal = []
     yVal = []
     for i in range(int(10 * wing.span /2)):
         xVal.append(i/10)
-        yVal.append(normalAeroForce(i/10))
+        yVal.append(function(i/10))
     
     return np.polyfit(xVal,yVal,3)
-  #  print(np.polyfit(xVal,yVal,3))
-  #  plt.plot(xVal,yVal)
-  #  plt.show()
+    print(np.polyfit(xVal,yVal,3))
+    plt.plot(xVal,yVal)
+    plt.show()
+
+curveFit(function = c4moment)
