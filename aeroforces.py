@@ -44,7 +44,7 @@ def normalAeroForce(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = veloci
     #return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x)))
 
 def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
-    return 0.25*wing.chord(x)*((q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958))
+    return wing.chord(x)*((q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x))) / np.cos(a / 57.2958))
     #return (q(h,v,wing.chord(x),l0(x)) + 1/10 * q(h,v,wing.chord(x),l10(x)))
 
 def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce):
@@ -55,8 +55,8 @@ def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce):
         yVal.append(function(i/10))
     
     return np.polyfit(xVal,yVal,3)
-    print(np.polyfit(xVal,yVal,3))
-    plt.plot(xVal,yVal)
-    plt.show()
+    #print(np.polyfit(xVal,yVal,3))
+    #plt.plot(xVal,yVal)
+    #plt.show()
 
-curveFit(function = c4moment)
+#curveFit(function = c4moment)
