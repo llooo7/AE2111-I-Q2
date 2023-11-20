@@ -213,6 +213,16 @@ data2 = [
  1.000000 ,-0.002700,
  1.000000,  0.003300]
 
+wingbox = [
+0.1, -0.052900,
+0.1, 0.052700,
+0.71, 0.051600,
+0.71, -0.028600,
+]
+
+wingboxX=[0.1, 0.1, 0.71, 0.71, 0.1]
+wingboxY=[-0.0529, 0.0527, 0.0516, -0.0286, -0.05290]
+
 j = 0
 for i in data1:
     if j%2==0:
@@ -230,7 +240,8 @@ for i in data2:
 fig, ax = plt.subplots()
 ax.plot(x1, y1, color="black")
 ax.plot(x2, y2, color="black")
-plt.ylim(-0.5, 0.5)
+ax.plot(wingboxX, wingboxY, color="blue")
+plt.ylim(-0.2, 0.2)
 plt.title("SC 20414")
 
 plt.show()
