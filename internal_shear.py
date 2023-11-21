@@ -63,37 +63,13 @@ idx2 = maximum.index(min(maximum))
 n_crit_max = n_values[idx1]
 n_crit_min = n_values[idx2]
 
-n_list = [n_crit_min,n_crit_max]
-mass_list = [mass_values[idx2], mass_values[idx1]]
-v_list = [v_values[idx2], v_values[idx1]]
-h_list = [h_values[idx2], h_values[idx1]]
+shearmax = shear[idx1]
+shearmin = shear[idx2]
 
-shear0 = []
-moment0 = []
-torsion0 = []
 
-for n,mass,v,h in zip(n_list,mass_list,v_list,h_list):
-
-    Weight = mass*9.81
-    v = v*np.sqrt(1.225/h)
-    q = 1/2*getDensity(h)*v**2
-    CLd = n*Weight/(0.5*h*v**2*surface)
-    CL0 = 0.383907
-    CL10 = 1.2045817
-    factor = (CLd-CL0)/(CL10-CL0)
-    alpha = np.arcsin(factor*np.sin(10/57.3))*57.3
+plt.plot(span, shearmax, color = 'red')
+plt.plot(span, shearmin, color = 'red')
     
-    a,b,c,d = plot(n,mass,v,h,alpha)
-    
-    shear0.append(b)
-    moment0.append(c)
-    torsion0.append(d)
-    
-    
-for i in shear0:  
-    
-    plt.plot(span, i, color = 'red')
-
 plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
 plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 plt.xlim(0,12.815)
@@ -102,15 +78,9 @@ plt.ylabel('I')
 plt.grid(True)
 
 plt.show()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
