@@ -5,7 +5,7 @@ from scipy import integrate
 from Moment_of_inertia import *
 from Internal_moment import momentmax,momentmin
 
-
+fig,ax = plt.subplots()
 h,i,j,k,l = np.polyfit(span, momentmax, 4)
 p,q,r,s,t = np.polyfit(span, momentmin, 4)
 
@@ -41,9 +41,9 @@ plt.plot(span, V_max, color = 'r')
 plt.plot(span,V_min, color = 'b')
 plt.xlabel('y')
 plt.ylabel('I')
-plt.ylim(0,5)
 plt.title('Span-wise moment of Inertia')
-
+plt.grid(True)
+plt.ylim(-5,5)
 plt.show()
 
 

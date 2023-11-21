@@ -10,10 +10,10 @@ from bending_moment import *
 fig, ax = plt.subplots()
 span = np.arange(0,12.815,0.001)
 
-n_values = [1.21,-2.23,3.23,-1.1]
+n_values = [1.21,-2.23,3.23,-1]
 mass_values = [15000,15000,31000,31000]
 v_values = [50,46,70,69] 
-h_values = [4,5,6,7]
+h_values = [0,0,11000,11000]
 shear = []
 moment = []
 torsion = []
@@ -26,9 +26,10 @@ maximum3 = []
 for n,mass,v,h in zip(n_values,mass_values,v_values,h_values):
 
     Weight = mass*9.81
-    v = v*np.sqrt(1.225/h)
-    q = 1/2*getDensity(h)*v**2
-    CLd = n*Weight/(0.5*h*v**2*surface)
+    rho = getDensity(h)
+    v = v*np.sqrt(1.225/rho)
+    q = 1/2*rho*v**2
+    CLd = n*Weight/(q*surface)
     CL0 = 0.383907
     CL10 = 1.2045817
     factor = (CLd-CL0)/(CL10-CL0)
