@@ -6,14 +6,14 @@ from scipy import interpolate
 import isa
 import wing
 import aeroforces
-import Moment_of_inertia
+from Moment_of_inertia import moment_of_inertia, E
 import bending_moment
 
 n = 1
 mass = 1
-v = 50
-h = 1
-a = 5
+v = 260
+h = 3000
+a = 10
 
 t_spar = 0.005
 t_skin = 0.002
@@ -25,7 +25,7 @@ def deflection():
     moments = bending_moment.plot(n, mass, v, h, a)
     x_vals, bending_moments = moments[4], moments[2]
 
-    M = interpolate.InterpolatedUnivariateSpline(x_vals, bending_moments/Moment_of_inertia.E/Moment_of_inertia.I,k=5)
+    M = interpolate.InterpolatedUnivariateSpline(x_vals, bending_moments/E/moment_of_inertia(A_str,n_str,t_spar,t_skin),k=5)
     v1_deflection = M.antiderivative(1)
 
     x_v1___, y_v1___ = np.array([]), np.array([])
