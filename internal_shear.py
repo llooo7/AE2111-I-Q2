@@ -11,8 +11,8 @@ fig, ax = plt.subplots()
 span = np.arange(0,12.815,0.001)
 
 n_values = [1.21,-2.23,3.23,-1.1]
-mass_values = [2,3,4,5]
-v_values = [3,4,5,6] 
+mass_values = [15000,15000,31000,31000]
+v_values = [50,46,70,69] 
 h_values = [4,5,6,7]
 shear = []
 moment = []

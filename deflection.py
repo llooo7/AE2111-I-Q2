@@ -3,25 +3,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import integrate
 from Moment_of_inertia import *
-from Internal_moment import *
+from Internal_moment import momentmax,momentmin
 
 
-def momentmax(y):
-    
-    a,b,c,d,e,p,q,r,s,t = moment_fit()
-    return (a*y**4+b*y**3+c*y**2+d*y+e)
+h,i,j,k,l = np.polyfit(span, momentmax, 4)
+p,q,r,s,t = np.polyfit(span, momentmin, 4)
 
-def momentmin(y):
-    
-    a,b,c,d,e,p,q,r,s,t = moment_fit()
-    return (p*y**4+q*y**3+r*y**2+s*y+t)
 
+def moment_maxfunction(y):
+    return (h*y**4 + i*y**3 + j*y**2 +k*y + l)
+
+def moment_minfunction(y):
+    return ((p*y**4 + q*y**3 + r*y**2 + s*y**2 + t))
 
 def f(y):
-    return (momentmax(y)/(a*y**4 + b*y**3 + c*y**2 + d*y + e)/E)
+    return (moment_maxfunction(y)/(a*y**4 + b*y**3 + c*y**2 + d*y + e)/E)
 
 def g(y):
-    return (momentmin(y)/(a*y**4 + b*y**3 + c*y**2 + d*y + e)/E)
+    return(moment_minfunction(y)/(a*y**4 + b*y**3 + c*y**2 + d*y + e)/E)
+
 
 def deflection(span,function):
     
@@ -37,10 +37,11 @@ def deflection(span,function):
 V_max = deflection(span,f)
 V_min = deflection(span,g)
 
-plt.plot(span, V_max)
-plt.plot(span, V_min)
+plt.plot(span, V_max, color = 'r')
+plt.plot(span,V_min, color = 'b')
 plt.xlabel('y')
 plt.ylabel('I')
+plt.ylim(0,5)
 plt.title('Span-wise moment of Inertia')
 
 plt.show()

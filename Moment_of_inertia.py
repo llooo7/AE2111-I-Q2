@@ -10,11 +10,11 @@ end_point = 0.9
 left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
-span = np.arange(0,12.81,0.01)
-t_spar = 0.005
-t_skin = 0.002
-A_str = 0.0008
-n_str = 7
+span = np.arange(0,12.815,0.001)
+t_spar = 0.02
+t_skin = 0.001
+A_str = 0.001
+n_str = 8
 E = 68.94757*10**9
 
 

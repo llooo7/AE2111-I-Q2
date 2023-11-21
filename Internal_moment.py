@@ -25,14 +25,10 @@ n_crit_min = n_values[idx2]
 momentmax = moment[idx1]
 momentmin = moment[idx2]
 
-def moment_fit():
-    
-    a,b,c,d,e = np.polyfit(span, momentmax, 4)
-    p,q,r,s,t = np.polyfit(span, momentmin, 4)
 
 
-plt.plot(span, momentmax, color = 'red')
-plt.plot(span, momentmin, color = 'red')
+plt.plot(span, momentmax, color = 'blue')
+plt.plot(span, momentmin, color = 'blue')
     
 plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
 plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
