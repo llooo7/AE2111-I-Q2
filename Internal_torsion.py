@@ -2,10 +2,10 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
-from critical_points import *
+from internal_shear import *
 
 for i in torsion:
-    plt.plot(span, i, color = 'blue')
+    plt.plot(span, i, color = 'green')
     
 plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
 plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
@@ -16,12 +16,15 @@ plt.grid(True)
 
 plt.show()
 
+for i in torsion0:  
+    
+    plt.plot(span, i, color = 'green')
 
+plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
+plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
+plt.xlim(0,12.815)
+plt.xlabel('y')
+plt.ylabel('I')
+plt.grid(True)
 
-idx1 = maximum3.index(max(maximum3))
-idx2 = maximum3.index(min(maximum3))
-
-n_crit_max = n_values[idx1]
-n_crit_min = n_values[idx2]
-
-print(n_crit_max,n_crit_min)
+plt.show()
