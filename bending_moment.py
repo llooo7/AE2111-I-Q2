@@ -143,6 +143,7 @@ def plot(n, mass, v, h, a, CLd):
     ax[1][3].plot(x_torque___, y_torque___, label="Torque 2")
     """
     integrate_spline(n, mass, v, h, a, CLd)
+    """
     #ax[1][0].plot(ypos1, lcoe1, "o")
     #ax[1][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
     ax[0].set_title("Load distribution diagram")
@@ -154,6 +155,7 @@ def plot(n, mass, v, h, a, CLd):
     ax[3].set_title("Torque diagram")
     ax[3].plot(x_torque___, y_torque___, label="Torque 2")
     #plt.show()
+    """
     return y_load___, y_shear___, y_moment___, y_torque___, x_load___
 
 # MAIN    
