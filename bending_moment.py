@@ -62,19 +62,19 @@ def normal_force(x, a):
     #return ((l_0(x) + l_10(x))/10*a + l_0(x)) / np.cos(a / 57.2958)
     return np.sqrt(pow((l_0(x) + a * 1/10 * l_10(x)) / np.cos(a / 57.2958),2) + pow((d_0(x) + a * 1/10 * d_10(x)) / np.cos(a / 57.2958),2))
 
-def integrate_spline(n=1, mass=320000, v=10, h=1, a=0):
+def integrate_spline(n=1, mass=320000, v=10, h=1, a=0, CLd=0):
     global x_load___, y_load___, x_load___other, y_load___other, x_shear___, y_shear___, x_moment___, y_moment___, x_torque___, y_torque___
     x_load___, y_load___, x_load___other, y_load___other  = np.array([]), np.array([]), np.array([]), np.array([])
     
     
     for i in range(0, int(L*1000)):
         if i == int(engine_ypos*1000):
-            y_load___ = np.append(y_load___, float(isa.getDensity(h))*normal_force(i/1000, a)/2*v*v*chord(i/1000) + n*(- engine_weight - wing_load_dist(i/1000)))
-            #y_load___ = np.append(y_load___, aeroforces.normalAeroForce(i/1000, v, a, h) + n*(- engine_weight - wing_load_dist(i/1000)))
+            #y_load___ = np.append(y_load___, float(isa.getDensity(h))*normal_force(i/1000, a)/2*v*v*chord(i/1000) + n*(- engine_weight - wing_load_dist(i/1000)))
+            y_load___ = np.append(y_load___, aeroforces.normalAeroForce(i/1000, v, a, h, CLd) + n*(- engine_weight - wing_load_dist(i/1000)))
             y_load___other = np.append(y_load___other, - engine_weight - wing_load_dist(i/1000))
         else:
-            y_load___ = np.append(y_load___, float(isa.getDensity(h))*normal_force(i/1000, a)/2*v*v*chord(i/1000) + n*(- wing_load_dist(i/1000)))
-            #y_load___ = np.append(y_load___, aeroforces.normalAeroForce(i/1000, v, a, h) + n*(- wing_load_dist(i/1000)))
+            #y_load___ = np.append(y_load___, float(isa.getDensity(h))*normal_force(i/1000, a)/2*v*v*chord(i/1000) + n*(- wing_load_dist(i/1000)))
+            y_load___ = np.append(y_load___, aeroforces.normalAeroForce(i/1000, v, a, h, CLd) + n*(- wing_load_dist(i/1000)))
             y_load___other = np.append(y_load___other, - wing_load_dist(i/1000))
         x_load___ = np.append(x_load___, i/1000)
 
@@ -119,7 +119,7 @@ def integrate_spline(n=1, mass=320000, v=10, h=1, a=0):
 
 
 def plot(n, mass, v, h, a):
-    #fig, ax = plt.subplots(1, 4, constrained_layout=True)
+    fig, ax = plt.subplots(1, 4, constrained_layout=True)
     """
     integrate_spline(ypos0, lcoe0, n, mass, v, h, 0)
     #ax[0][0].plot(ypos0, lcoe0, "o")
@@ -143,7 +143,7 @@ def plot(n, mass, v, h, a):
     ax[1][3].plot(x_torque___, y_torque___, label="Torque 2")
     """
     integrate_spline(n, mass, v, h, a)
-    """#ax[1][0].plot(ypos1, lcoe1, "o")
+    #ax[1][0].plot(ypos1, lcoe1, "o")
     #ax[1][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
     ax[0].set_title("Load distribution diagram")
     ax[0].plot(x_load___, y_load___, label="Interpolated Spline 2")
@@ -153,15 +153,16 @@ def plot(n, mass, v, h, a):
     ax[2].plot(x_moment___, y_moment___, label="Bending moment 2")
     ax[3].set_title("Torque diagram")
     ax[3].plot(x_torque___, y_torque___, label="Torque 2")
-    plt.show()"""
+    plt.show()
     return y_load___, y_shear___, y_moment___, y_torque___, x_load___
 
 # MAIN    
 
-n = 1
+n = 2
 mass = 1
-v = 50
-h = 1
+v = 200
+h = 0
 a = 5
+CLd = 1
 
-plot(n, mass, v, h, a)
+plot(n, mass, v, h, a, CLd)
