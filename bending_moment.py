@@ -157,7 +157,7 @@ def plot(n, mass, v, h, a, CLd):
     return y_load___, y_shear___, y_moment___, y_torque___, x_load___
 
 # MAIN    
-
+"""
 n = -2
 mass = 1
 v = 200
@@ -166,3 +166,4 @@ a = 5
 CLd = -0.6
 
 plot(n, mass, v, h, a, CLd)
+"""
