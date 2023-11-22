@@ -153,7 +153,7 @@ def plot(n, mass, v, h, a, CLd):
     ax[2].plot(x_moment___, y_moment___, label="Bending moment 2")
     ax[3].set_title("Torque diagram")
     ax[3].plot(x_torque___, y_torque___, label="Torque 2")
-    plt.show()
+    #plt.show()
     return y_load___, y_shear___, y_moment___, y_torque___, x_load___
 
 # MAIN    
