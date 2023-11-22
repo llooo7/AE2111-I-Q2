@@ -12,8 +12,8 @@ right_side = 0.051600 + 0.028600
 height = end_point - start_point
 span = np.arange(0,12.815,0.001)
 t_spar = 0.02
-t_skin = 0.001
-A_str = 0.001
+t_skin = 0.005
+A_str = 0.01
 n_str = 8
 E = 68.94757*10**9
 

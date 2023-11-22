@@ -77,4 +77,4 @@ def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce, plot = False):
     plt.plot(xVal,yVal)
     plt.show()
 
-print(normalAeroForce(np.arange(0,1,0.1),10,1.75,0,-0.6))
+
