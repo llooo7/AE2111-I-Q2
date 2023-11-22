@@ -28,7 +28,6 @@ momentmax = moment[idx1]
 momentmin = moment[idx2]
 
 
-
 plt.plot(span, momentmax, color = 'blue')
 plt.plot(span, momentmin, color = 'blue')
     

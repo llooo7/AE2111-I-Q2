@@ -57,7 +57,10 @@ def aoaNormalize(val0,val1,angle,cld):
 def normalAeroForce(x,v = 10,a = 1.75,h = 0,cld = 0.328): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
     normalLift = aoaNormalize(q(h,v,wing.chord(x),l0(x)), q(h,v,wing.chord(x),l10(x)),a,cld)
     normalDrag = aoaNormalize(q(h,v,wing.chord(x),d0(x)),q(h,v,wing.chord(x),d10(x)),a,cld) 
+
     return specialAbs(normalLift,normalDrag,a) 
+
+    return specialAbs(normalLift,normalDrag,a)
 
 def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
     return q(h,v,wing.chord(x),c40(x)) + a * 1/10 * q(h,v,wing.chord(x),c410(x))
@@ -74,4 +77,4 @@ def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce, plot = False):
     plt.plot(xVal,yVal)
     plt.show()
 
-#curveFit(function = c4moment)
+print(normalAeroForce(np.arange(0,1,0.1),10,1.75,0,-0.6))
