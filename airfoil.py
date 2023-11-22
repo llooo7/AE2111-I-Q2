@@ -223,6 +223,7 @@ wingbox = [
 wingboxX=[0.1, 0.1, 0.71, 0.71, 0.1]
 wingboxY=[-0.0529, 0.0527, 0.0516, -0.0286, -0.05290]
 
+
 j = 0
 for i in data1:
     if j%2==0:
@@ -237,10 +238,41 @@ for i in data2:
         y2.append(i)
     j += 1
 
+x_stringers = [(0.71-0.1)/5+0.1, 2*(0.71-0.1)/5+0.1, 3*(0.71-0.1)/5+0.1, 4*(0.71-0.1)/5+0.1]
+y_stringers_top = [(0.0516-0.0527)/5+0.0527,2*(0.0516-0.0527)/5+0.0527 ,3*(0.0516-0.0527)/5+0.0527 ,4*(0.0516-0.0527)/5+0.0527]
+y_stringers_bottom = [(-0.0286+0.05290)/5-0.05290,2*(-0.0286+0.05290)/5-0.05290 ,3*(-0.0286+0.05290)/5-0.05290 ,4*(-0.0286+0.05290)/5-0.05290]
+
+def top_skin(x):
+    return (0.0516-0.0527)*x+0.0527
+
+def bottom_skin(x):
+    return (-0.0286+0.0667)*x-0.0560
+
+
+h_string_top = []
+
+def top_stringer(x_str, y_str):
+    h_string_top.append()
+    h_string_top.append()
+    return
+
+
+
+
+
 fig, ax = plt.subplots()
 ax.plot(x1, y1, color="black")
 ax.plot(x2, y2, color="black")
 ax.plot(wingboxX, wingboxY, color="blue")
+
+for i in range(4):
+    ax.plot([x_stringers[i]-0.015,x_stringers[i]+0.015], [top_skin(x_stringers[i]-0.015), top_skin(x_stringers[i]+0.015)], color="blue", linewidth=2)
+    ax.plot([x_stringers[i]-0.015,x_stringers[i]-0.015], [top_skin(x_stringers[i]), top_skin(x_stringers[i])-0.015], color="blue", linewidth=2)
+
+for i in range(4):
+    ax.plot([x_stringers[i]-0.015,x_stringers[i]+0.015], [bottom_skin(x_stringers[i]-0.015), bottom_skin(x_stringers[i]+0.015)], color="blue", linewidth=2)
+    ax.plot([x_stringers[i]-0.015,x_stringers[i]-0.017], [bottom_skin(x_stringers[i]), bottom_skin(x_stringers[i])+0.015], color="blue", linewidth=2)
+
 plt.ylim(-0.2, 0.2)
 plt.title("SC 20414")
 
