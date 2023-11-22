@@ -35,7 +35,7 @@ for n,mass,v,h in zip(n_values,mass_values,v_values,h_values):
     factor = (CLd-CL0)/(CL10-CL0)
     alpha = np.arcsin(factor*np.sin(10/57.3))*57.3
     
-    a,b,c,d,e = plot(n,mass,v,h,alpha)
+    a,b,c,d,e = plot(n,mass,v,h,alpha,CLd)
     shear.append(b)
     moment.append(c)
     torsion.append(d)
