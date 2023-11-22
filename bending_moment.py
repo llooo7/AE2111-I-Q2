@@ -87,7 +87,10 @@ def integrate_spline(n=1, mass=320000, v=10, h=1, a=0):
     x_shear___, y_shear___ = np.array([]), np.array([])
     for i in range(0, int(L*1000)):
         x_shear___ = np.append(x_shear___, i/1000)
-        y_shear___ = np.append(y_shear___, shear(i/1000) - shear(L))
+        if i <= int(engine_ypos*1000):
+            y_shear___ = np.append(y_shear___, shear(i/1000) - shear(L) + n*(engine_weight))
+        else:
+            y_shear___ = np.append(y_shear___, shear(i/1000) - shear(L))
 
     shear0 = interpolate.InterpolatedUnivariateSpline(x_shear___,y_shear___,k=5)
     moment = shear0.antiderivative(1)
