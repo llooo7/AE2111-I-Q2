@@ -119,7 +119,7 @@ def integrate_spline(n=1, mass=320000, v=10, h=1, a=0, CLd=0):
 
 
 def plot(n, mass, v, h, a, CLd):
-    fig, ax = plt.subplots(1, 4, constrained_layout=True)
+    #fig, ax = plt.subplots(1, 4, constrained_layout=True)
     """
     integrate_spline(ypos0, lcoe0, n, mass, v, h, 0)
     #ax[0][0].plot(ypos0, lcoe0, "o")
