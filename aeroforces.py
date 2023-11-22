@@ -47,12 +47,16 @@ def q(h,v,S,CL):
 def specialAbs(a,b):
     return np.sqrt(pow(a,2) + pow(b,2))
 
-def aoaNormalize(val0,val1,angle):
-    return ( val0 + angle * 0.1 * val1 ) / np.cos(a / 57.2958)
+cl0 = 0.3839
+cl10 = 1.2046
 
-def normalAeroForce(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
-    normalLift = aoaNormalize(q(h,v,wing.chord(x),l0(x)), q(h,v,wing.chord(x),l10(x)),a)
-    normalDrag = aoaNormalize(q(h,v,wing.chord(x),d0(x)),q(h,v,wing.chord(x),d10(x)),a) 
+def aoaNormalize(val0,val1,angle,cld):
+    return val0 + (cld - cl0)/(cl10 - cl0)*(val1 - val0)
+    #return ( val0 + angle * 0.1 * val1 ) / np.cos(a / 57.2958)
+
+def normalAeroForce(x,v = 10,a = 1.75,h = 0,cld = 0.38): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
+    normalLift = aoaNormalize(q(h,v,wing.chord(x),l0(x)), q(h,v,wing.chord(x),l10(x)),a,cld)
+    normalDrag = aoaNormalize(q(h,v,wing.chord(x),d0(x)),q(h,v,wing.chord(x),d10(x)),a,cld) 
     return specialAbs(normalLift,normalDrag)
 
 def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
