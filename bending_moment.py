@@ -118,7 +118,7 @@ def integrate_spline(n=1, mass=320000, v=10, h=1, a=0, CLd=0):
             y_torque___ = np.append(y_torque___, torque(i/1000) - torque(L))
 
 
-def plot(n, mass, v, h, a):
+def plot(n, mass, v, h, a, CLd):
     fig, ax = plt.subplots(1, 4, constrained_layout=True)
     """
     integrate_spline(ypos0, lcoe0, n, mass, v, h, 0)
@@ -142,7 +142,7 @@ def plot(n, mass, v, h, a):
     ax[1][2].plot(x_moment___, y_moment___, label="Bending moment 2")
     ax[1][3].plot(x_torque___, y_torque___, label="Torque 2")
     """
-    integrate_spline(n, mass, v, h, a)
+    integrate_spline(n, mass, v, h, a, CLd)
     #ax[1][0].plot(ypos1, lcoe1, "o")
     #ax[1][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
     ax[0].set_title("Load distribution diagram")
@@ -158,11 +158,11 @@ def plot(n, mass, v, h, a):
 
 # MAIN    
 
-n = 2
+n = -2
 mass = 1
 v = 200
 h = 0
 a = 5
-CLd = 1
+CLd = -0.6
 
 plot(n, mass, v, h, a, CLd)
