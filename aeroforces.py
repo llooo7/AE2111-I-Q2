@@ -36,10 +36,7 @@ c40 = sp.interpolate.interp1d(ypos[0],c4m[0],kind='quadratic',fill_value="extrap
 c410 = sp.interpolate.interp1d(ypos[1],c4m[1],kind='quadratic',fill_value="extrapolate")
 
 d0 = sp.interpolate.interp1d(ypos[0],dcoe[0],kind='quadratic',fill_value="extrapolate")
-d10 = sp.interpolate.interp1d(ypos[1],dcoe[1],kind='quadratic',fill_value="extrapolate")
-
-def pgApprox(h,v):
-    return np.sqrt()    
+d10 = sp.interpolate.interp1d(ypos[1],dcoe[1],kind='quadratic',fill_value="extrapolate")   
 
 def q(h,v,S,CL):
     a = np.sqrt(1.4 * 287 * isa.getTemp(h))
