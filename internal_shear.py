@@ -12,7 +12,7 @@ span = np.arange(0,12.815,0.001)
 
 n_values = [-1,-1,2.6567,2.6567,2.5,2.5,-1,-1,2.5,2.5,-1,-1,2.6567,2.6567,-1,-1,2.5,2.5,-1,-1,2.5,2.5,-1,-1]
 mass_values = [15017.1,15017.1,15017.1,15017.1,26748.6,26748.6,26748.6,26748.6,31139.2,31139.2,31139.2,31139.2,15017.1,15017.1,15017.1,15017.1,26748.6,26748.6,26748.6,26748.6,31139.2,31139.2,31139.2,31139.2]
-v_values = [42,127,68.5,159,88.5,159,57,127,95.5,159,61,127,68.5,133.5,42,127,88.5,133.5,56,127,95.5,133.5,60.5,127] 
+v_values = [30,127,68.5,159,88.5,159,57,127,95.5,159,61,127,68.5,133.5,42,127,88.5,133.5,56,127,95.5,133.5,60.5,127] 
 h_values = [0,0,0,0,0,0,0,0,0,0,0,0,10668,10668,10668,10668,10668,10668,10668,10668,10668,10668,10668,10668]
 shear = []
 moment = []
@@ -63,6 +63,20 @@ idx2 = maximum.index(min(maximum))
 
 n_crit_max = n_values[idx1]
 n_crit_min = n_values[idx2]
+m_crit_max = mass_values[idx1]
+m_crit_min = mass_values[idx2]
+v_crit_max = v_values[idx1]
+v_crit_min = v_values[idx2]
+h_crit_max = h_values[idx1]
+h_crit_min = h_values[idx2]
+
+print(n_crit_max,n_crit_min)
+print(m_crit_max,m_crit_min)
+print(v_crit_max,v_crit_min)
+print(h_crit_max,h_crit_min)
+
+
+
 
 shearmax = shear[idx1]
 shearmin = shear[idx2]
