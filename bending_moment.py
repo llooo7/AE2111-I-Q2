@@ -143,23 +143,23 @@ def plot(n, mass, v, h, a, CLd):
     ax[1][3].plot(x_torque___, y_torque___, label="Torque 2")
     """
     integrate_spline(n, mass, v, h, a, CLd)
-    """
+    
     #ax[1][0].plot(ypos1, lcoe1, "o")
     #ax[1][0].plot(x_load___other, y_load___other, color="red", linestyle="--")
-    ax[0].set_title("Load distribution diagram")
-    ax[0].plot(x_load___, y_load___, label="Interpolated Spline 2")
-    ax[1].set_title("Shear stress diagram")
-    ax[1].plot(x_shear___, y_shear___, label="Shear stress 2")
-    ax[2].set_title("Bending moment diagram")
-    ax[2].plot(x_moment___, y_moment___, label="Bending moment 2")
-    ax[3].set_title("Torque diagram")
-    ax[3].plot(x_torque___, y_torque___, label="Torque 2")
+    #ax[0].set_title("Load distribution diagram")
+    #ax[0].plot(x_load___, y_load___, label="Interpolated Spline 2")
+    #ax[1].set_title("Shear stress diagram")
+    #ax[1].plot(x_shear___, y_shear___, label="Shear stress 2")
+    #ax[2].set_title("Bending moment diagram")
+    #ax[2].plot(x_moment___, y_moment___, label="Bending moment 2")
+    #ax[3].set_title("Torque diagram")
+    #ax[3].plot(x_torque___, y_torque___, label="Torque 2")
     #plt.show()
-    """
+    
     return y_load___, y_shear___, y_moment___, y_torque___, x_load___
 
 # MAIN    
-"""
+
 n = -2
 mass = 1
 v = 200
@@ -168,4 +168,4 @@ a = 5
 CLd = -0.6
 
 plot(n, mass, v, h, a, CLd)
-"""
+

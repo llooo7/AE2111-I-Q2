@@ -11,10 +11,11 @@ left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
 span = np.arange(0,12.815,0.001)
-t_spar = 0.02
-t_skin = 0.005
-A_str = 0.01
-n_str = 8
+t_spar = 0.015
+t_skin = 0.007
+A_str = 0.001
+n_str_top = 2
+n_str_bottom = 2
 E = 68.94757*10**9
 
 
@@ -44,18 +45,23 @@ plot_trapezoid(left_side, right_side, height)
 def chord_length(y):
     return (-0.2472*y + 4.52)
 
-def stringer(left,right,top,bottom,n_str):    
+
+def stringer(left,right,top,bottom,n_str_top,n_str_bottom):    
     str_top = [0]
     str_bottom = [0]
+
+    space_top = top/(n_str_top-1)
+    space_bottom = (left-right)/(n_str_bottom-1)
     
-    space_top = top/(n_str-1)
-    space_bottom = (left-right)/(n_str-1)
-    
-    for i in range(n_str-1):
+    for i in range(n_str_top-1):
        x_top = space_top + str_top[-1]
-       y_bottom = space_bottom + str_bottom[-1]
        str_top.append(x_top)
-       str_bottom.append(y_bottom)
+
+    for j in range(n_str_bottom-1):
+        y_bottom = space_bottom + str_bottom[-1]
+       
+        str_bottom.append(y_bottom)
+        
     
     return str_top,str_bottom
     
@@ -75,15 +81,14 @@ def area(c,t_spar,t_skin):
     return A1,A2,A3,A4,height,left,right,bottom
 
 
-def moment_of_inertia(A_str,n_str,t_spar,t_skin):
+def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
     
     chords = chord_length(span)
     moment_of_inertia = []
     
     for i in chords:
-        
         Atop,Aleft,Aright,Abottom,height,left,right,bottom = area(i,t_spar,t_skin)
-        
+
         c_x = (left**2 + right**2 + left*right)/(3*(left+right))
         c_y = (left+2*right)/(3*(left+right))*height
         
@@ -91,15 +96,19 @@ def moment_of_inertia(A_str,n_str,t_spar,t_skin):
         distance_bottom = left - np.sqrt((bottom/2)**2/(1+(height/(left-right))**2)) - c_x
         distance_left = left/2 - c_x
         distance_right = right/2 - c_x
-        t,b = stringer(left,right,height,bottom,n_str)
-        
+        t,b = stringer(left,right,height,bottom,n_str_top,n_str_bottom)
+        I_str_bottom = []
         for j in b:
-            I_str_bottom = []
-            j = c_x - j
-            I_str_bottom.append(A_str*j**2)
             
+            dist = left - c_x - j
+            steiner = A_str*dist**2
+            I_str_bottom.append(steiner)
+
+        
         I_str_bottom = sum(I_str_bottom)
-        I_str_top = n_str*A_str*distance_top**2
+
+        I_str_top = n_str_top*A_str*distance_top**2
+
         I_top = 1/12*height*t_skin**3 + Atop*distance_top**2
         I_left = 1/12*t_spar*left**3 + Aleft*distance_left**2
         I_right = 1/12*t_spar*right**3 + Aright*distance_right**2
@@ -109,15 +118,15 @@ def moment_of_inertia(A_str,n_str,t_spar,t_skin):
         I_tot = I_top + I_left + I_right + I_bottom + I_str_bottom + I_str_top
         
         moment_of_inertia.append(I_tot)
-
     return moment_of_inertia
 
 
-I = moment_of_inertia(A_str,n_str,t_spar,t_skin)
+
+I = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
 
 
 a,b,c,d,e = np.polyfit(span,I,4)
-
+print(a,b,c,d,e)
 I_2 = a*span**4 + b*span**3 + c*span**2 + d*span + e
 
 plt.plot(span, I)

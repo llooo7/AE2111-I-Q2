@@ -2,17 +2,25 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import integrate
-from moment_of_inertia import *
-
+from Moment_of_inertia import *
+from Internal_torsion import torquemax,torquemin
 
 
 G =26*10**9
 
-def torsion(y):
-    return (500*y**2 + 300*y + 500)
+
+h,i,j,k,l = np.polyfit(span,torquemax,4)
+m,n,o,p,u = np.polyfit(span, torquemin, 4)
 
 
-def torsional_constant(n_str,A_str,t_spar,t_skin):
+def torsion_max(y):
+    return (h*y**4 + i*y**3 + j*y**2 +k*y + l)
+
+def torsion_min(y):
+    return (m*y**4 + n*y**3 + o*y**2 + p*y**2 + u)
+
+
+def torsional_constant(n_str_top,n_str_bottom,A_str,t_spar,t_skin):
     
     chords = chord_length(span)
     J = []
@@ -20,7 +28,7 @@ def torsional_constant(n_str,A_str,t_spar,t_skin):
         
         A1,A2,A3,A4,height,left,right,bottom = area(i,t_spar,t_skin)
         
-        A = 0.5*(left+right)*height+A_str*n_str
+        A = 0.5*(left+right)*height+A_str*(n_str_top+n_str_bottom)
         
         l = (left + right)/t_spar + (height + bottom)/t_skin
         
@@ -31,40 +39,37 @@ def torsional_constant(n_str,A_str,t_spar,t_skin):
     return J
         
         
-J = torsional_constant(n_str,A_str,t_spar, t_skin)
+J = torsional_constant(n_str_top,n_str_bottom,A_str,t_spar, t_skin)
 
 
 p,q,r,s,t = np.polyfit(span,J,4)
 
 
 def f(y):
-    return (torsion(y)/(p*y**4 + q*y**3 + r*y**2 + s*y + t)/G)
+    return (torsion_max(y)/(p*y**4 + q*y**3 + r*y**2 + s*y + t)/G)
 
-def twist(span):
+def g(y):
+    return (torsion_min(y)/(p*y**4 + q*y**3 + r*y**2 + s*y + t)/G)
+
+def twist(span,function):
     
     theta = []
     for i in span:
-        result_1, error_1 = integrate.quad(f, 0, i)
+        result_1, error_1 = integrate.quad(function, 0, i)
         theta.append(result_1)
         
     return theta
 
 
-Theta = twist(span)
+Theta_max = np.array(twist(span,f))*180/np.pi
+Theta_min = np.array(twist(span,g))*180/np.pi
 
-a,b,c,d,e,f,g,h = np.polyfit(span,Theta,7)
-
-Theta_2 = a*span**7+ b*span**6 + c*span**5 + d*span**4 + e*span**3 + f*span**2 + g*span + h
-
-
-
-
-
-
-plt.plot(span, Theta)
-plt.plot(span, Theta_2)
+plt.plot(span, Theta_max)
+plt.plot(span, Theta_min)
 plt.xlabel('y')
 plt.ylabel('I')
 plt.title('Span-wise Wing Twist')
+plt.grid(True)
+plt.ylim(-2,10)
 
 plt.show()

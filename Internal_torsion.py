@@ -20,7 +20,7 @@ n_crit_max = n_values[idx1]
 n_crit_min = n_values[idx2]
 
 torquemax = torsion[idx1]
-torquemin = tosion[idx2]
+torquemin = torsion[idx2]
 
 
 
