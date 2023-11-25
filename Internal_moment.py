@@ -31,15 +31,16 @@ momentmin = moment[idx2]
 
 
 
-plt.plot(span, momentmax, color = 'blue')
+plt.plot(span, momentmax, color = 'blue',label='n = 2.5')
 
-plt.plot(span, momentmin, color = 'red')
-    
+plt.plot(span, momentmin, color = 'red', label = 'n = -1')
+plt.title('Internal Bending Moment in [Nm] for n = -1 and n = 2.5')
 plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
 plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 plt.xlim(0,12.815)
 plt.xlabel('y')
-plt.ylabel('I')
+plt.ylabel('Internal Bending Moment [Nm]')
+plt.legend()
 plt.grid(True)
 
 plt.show()

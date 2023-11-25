@@ -9,16 +9,15 @@ from Internal_torsion import torquemax,torquemin
 G =26*10**9
 
 
-h,i,j,k,l = np.polyfit(span,torquemax,4)
-m,n,o,p,u = np.polyfit(span, torquemin, 4)
+h,i,j,k,l,m,n,o = np.polyfit(span,torquemax,7)
+p,q,r,s,t,u,v1,w1 = np.polyfit(span, torquemin, 7)
 
 
 def torsion_max(y):
-    return (h*y**4 + i*y**3 + j*y**2 +k*y + l)
+    return (h*y**7 + i*y**6 + j*y**5 +k*y**4 + l*y**3 + m*y**2 + n*y + o)
 
 def torsion_min(y):
-    return (m*y**4 + n*y**3 + o*y**2 + p*y**2 + u)
-
+    return (p*y**7 + q*y**6 + r*y**5 + s*y**4 + t*y**3 + u*y**2 + v1*y + w1)
 
 def torsional_constant(n_str_top,n_str_bottom,A_str,t_spar,t_skin):
     
@@ -42,14 +41,14 @@ def torsional_constant(n_str_top,n_str_bottom,A_str,t_spar,t_skin):
 J = torsional_constant(n_str_top,n_str_bottom,A_str,t_spar, t_skin)
 
 
-p,q,r,s,t = np.polyfit(span,J,4)
+v,w,x,y1,z = np.polyfit(span,J,4)
 
 
 def f(y):
-    return (torsion_max(y)/(p*y**4 + q*y**3 + r*y**2 + s*y + t)/G)
+    return (torsion_max(y)/(v*y**4 + w*y**3 + x*y**2 + y1*y + z)/G)
 
 def g(y):
-    return (torsion_min(y)/(p*y**4 + q*y**3 + r*y**2 + s*y + t)/G)
+    return (torsion_min(y)/(v*y**4 + w*y**3 + x*y**2 + y1*y + z)/G)
 
 def twist(span,function):
     
@@ -64,12 +63,18 @@ def twist(span,function):
 Theta_max = np.array(twist(span,f))*180/np.pi
 Theta_min = np.array(twist(span,g))*180/np.pi
 
-plt.plot(span, Theta_max)
-plt.plot(span, Theta_min)
+
+plt.plot(span, Theta_max,color = 'r',label='n = 2.5')
+plt.plot(span, Theta_min, color = 'b',label='n = -1')
 plt.xlabel('y')
 plt.ylabel('I')
 plt.title('Span-wise Wing Twist')
 plt.grid(True)
-plt.ylim(-2,10)
+plt.ylim(-11,11)
+plt.axhline(10,0,12.8125,color='orange',label='Requirement')
+plt.axhline(-10,0,12.8125,color='orange')
+plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
+plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
+plt.legend(loc='lower left')
 
 plt.show()

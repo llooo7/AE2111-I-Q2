@@ -12,4 +12,4 @@ Cd0 = 0.0198
 e = 0.517
 
 def chord(y):
-    return rootCh - y * (rootCh-tipCh) / (span/2)
+    return rootCh - y * (rootCh-tipCh) / (wingspan/2)
