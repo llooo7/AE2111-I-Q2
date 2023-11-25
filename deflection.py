@@ -7,20 +7,20 @@ from Internal_moment import momentmax,momentmin
 
 
 h,i,j,k,l,m = np.polyfit(span, momentmax, 5)
-p,q,r,s,t = np.polyfit(span, momentmin, 4)
+p,q,r,s,t,u = np.polyfit(span, momentmin, 5)
 
-print(p,q,r,s,t)
+
 def moment_maxfunction(y):
     return (h*y**5 + i*y**4 + j*y**3 +k*y**2 + l*y + m)
 
 def moment_minfunction(y):
-    return (p*y**4 + q*y**3 + r*y**2 + s*y**2 + t)
+    return (p*y**5 + q*y**4 + r*y**3 + s*y**2 + t*y + u)
 
 def f(y):
     return (-moment_maxfunction(y)/(a*y**4 + b*y**3 + c*y**2 + d*y + e)/E)
 
 def g(y):
-    return (moment_minfunction(y)/100/(a*y**4 + b*y**3 + c*y**2 + d*y + e)/E)
+    return (-moment_minfunction(y)/(a*y**4 + b*y**3 + c*y**2 + d*y + e)/E)
 
 
 def deflection(span,function):
@@ -41,14 +41,17 @@ def deflection(span,function):
 V_max = deflection(span,f)
 V_min = deflection(span,g)
 
-plt.plot(span, V_max, color = 'r')
+plt.plot(span,V_max,color = 'r')
 plt.plot(span,V_min, color = 'b')
-plt.xlabel('y')
-plt.ylabel('I')
-plt.title('Span-wise moment of Inertia')
+plt.plot(span,[0,3.844],color = 'o')
+plt.plot(span,[0,-3.844], color = 'o')
+plt.xlabel('y [m]')
+plt.ylabel('Deflection [m]')
+plt.title('Deflection in [m] for n = -1 and n = 2.5')
+plt.ylim(-3,3)
+plt.xlim(0,14)
 plt.grid(True)
-plt.ylim(-5,7)
-plt.xlim(0,15)
+
 plt.show()
 
 

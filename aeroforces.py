@@ -5,6 +5,7 @@ import scipy as sp
 from scipy import interpolate
 import isa
 import wing
+from Moment_of_inertia import *
 
 data = [open("MainWing_a=0.00_v=10.00ms.txt"), open("MainWing_a=10.00_v=10.00ms.txt")]
 aoas = [0,10]
@@ -37,6 +38,8 @@ c410 = sp.interpolate.interp1d(ypos[1],c4m[1],kind='quadratic',fill_value="extra
 
 d0 = sp.interpolate.interp1d(ypos[0],dcoe[0],kind='quadratic',fill_value="extrapolate")
 d10 = sp.interpolate.interp1d(ypos[1],dcoe[1],kind='quadratic',fill_value="extrapolate")   
+
+
 
 def q(h,v,S,CL):
     a = np.sqrt(1.4 * 287 * isa.getTemp(h))
@@ -73,8 +76,5 @@ def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce, plot = False):
         yVal.append(function(i/10))
     
     return np.polyfit(xVal,yVal,3)
-    print(np.polyfit(xVal,yVal,3))
-    plt.plot(xVal,yVal)
-    plt.show()
 
 

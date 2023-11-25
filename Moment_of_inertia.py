@@ -11,8 +11,8 @@ left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
 span = np.arange(0,12.815,0.001)
-t_spar = 0.015
-t_skin = 0.007
+t_spar = 0.008
+t_skin = 0.005
 A_str = 0.001
 n_str_top = 2
 n_str_bottom = 2
@@ -126,7 +126,7 @@ I = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
 
 
 a,b,c,d,e = np.polyfit(span,I,4)
-print(a,b,c,d,e)
+
 I_2 = a*span**4 + b*span**3 + c*span**2 + d*span + e
 
 plt.plot(span, I)
