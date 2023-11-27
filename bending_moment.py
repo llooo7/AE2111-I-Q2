@@ -113,7 +113,7 @@ def integrate_spline(n=1, mass=320000, v=10, h=1, a=0, CLd=0):
     for i in range(0, int(L*1000)):
         x_torque___ = np.append(x_torque___, i/1000)
         if i <= int(engine_ypos*1000):
-            y_torque___ = np.append(y_torque___, torque(i/1000) +thrust*dz*cos(Lambda_c2) - torque(L) - n*engine_weight*0.2*chord(i/1000))
+            y_torque___ = np.append(y_torque___, torque(i/1000) +thrust*dz*cos(Lambda_c2) - torque(L) -n*engine_weight*0.2*chord(i/1000))
         else:
             y_torque___ = np.append(y_torque___, torque(i/1000) - torque(L))
 
