@@ -29,8 +29,8 @@ torquemin = torsion[idx2]
 
 
 
-plt.plot(span, torsion[idx1], color = 'green',label = 'n = -1')
-plt.plot(span, torsion[idx2], color = 'orange',label = 'n = 2.5')
+plt.plot(span, torsion[idx1], color = 'green',label = 'n = 2.5')
+plt.plot(span, torsion[idx2], color = 'orange',label = 'n = -1')
     
 plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
 plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)

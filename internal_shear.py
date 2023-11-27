@@ -29,7 +29,7 @@ maximum3 = []
 
 
 
-for n,mass,v,h in zip(n_values1,mass_values1,v_values1,h_values1):
+for n,mass,v,h in zip(n_values,mass_values,v_values,h_values):
 
     Weight = mass*9.81
     rho = getDensity(h)
