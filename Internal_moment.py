@@ -42,7 +42,7 @@ plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)
 plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 plt.xlim(0,12.815)
 plt.xlabel('y [m]')
-plt.ylabel('Internal Bending Moment [Nm] for n = -1 and n = 2.5')
+plt.ylabel('Internal Bending Moment [Nm]')
 plt.legend()
 plt.grid(True)
 
