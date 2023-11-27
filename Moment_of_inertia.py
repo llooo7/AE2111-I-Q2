@@ -112,7 +112,7 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
         I_top = 1/12*height*t_skin**3 + Atop*distance_top**2
         I_left = 1/12*t_spar*left**3 + Aleft*distance_left**2
         I_right = 1/12*t_spar*right**3 + Aright*distance_right**2
-        I_bottom = 1/12*t_skin*bottom*((t_skin**2*(height/bottom)**2)+bottom**2*((left-right)/bottom)**2)+Abottom*distance_bottom**2
+        I_bottom = 1/12*t_skin*bottom*(bottom**2*((left-right)/bottom)**2)+Abottom*distance_bottom**2
         
         
         I_tot = I_top + I_left + I_right + I_bottom + I_str_bottom + I_str_top
@@ -133,6 +133,7 @@ plt.plot(span, I)
 plt.plot(span, I_2)
 plt.xlabel('y [m]')
 plt.ylabel('I [kgm^2]')
-plt.title('Span-wise moment of Inertia')
+plt.title('Span-wise moment of Inertia in [kgm^2]')
+plt.grid(True)
 
 plt.show()

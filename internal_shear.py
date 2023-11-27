@@ -29,7 +29,7 @@ maximum3 = []
 
 
 
-for n,mass,v,h in zip(n_values1,mass_values1,v_values1,h_values1):
+for n,mass,v,h in zip(n_values,mass_values,v_values,h_values):
 
     Weight = mass*9.81
     rho = getDensity(h)
@@ -56,11 +56,14 @@ for i in shear:
 plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
 plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 plt.xlim(0,12.815)
-plt.xlabel('y')
-plt.ylabel('I')
+plt.xlabel('y [m]')
+plt.ylabel('Internal Shear Force [N]')
+plt.legend(loc='upper right')
+plt.title('Internal Shear Force [N] for all loading cases')
 plt.grid(True)
 
 plt.show()
+
 
 
 
@@ -97,6 +100,7 @@ plt.xlim(0,12.815)
 plt.xlabel('y [m]')
 plt.ylabel('Shear Force [N]')
 plt.legend(loc='upper right')
+plt.title('Internal Shear Force for n = -1 and n = 2.5')
 plt.grid(True)
 
 plt.show()
