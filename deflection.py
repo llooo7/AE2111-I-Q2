@@ -41,8 +41,8 @@ def deflection(span,function):
 V_max = deflection(span,f)
 V_min = deflection(span,g)
 
-plt.plot(span,V_max,color = 'r',label='n = 2.5')
-plt.plot(span,V_min, color = 'b',label = 'n = -1')
+plt.plot(span,V_max,color = 'r',label='n = -1')
+plt.plot(span,V_min, color = 'b',label = 'n = 2.5')
 plt.axhline(3.844,0,12.8125,color='orange',label='Requirement')
 plt.axhline(-3.844,0,12.8125,color='orange')
 plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  

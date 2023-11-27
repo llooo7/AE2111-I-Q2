@@ -67,7 +67,7 @@ def normalAeroForce(x,v = 10,a = 1.75,h = 0,cld = 0.328): #x = point on the wing
 
 #returns quarter chord moment
 def c4moment(x,v = 10,a = 1.75,h = 0): #x = point on the wing, v = velocity, a = angle of attack, given PER UNIT SPAN 
-    return q(h,v,wing.chord(x),c40(x)) + a * 1/10 * q(h,v,wing.chord(x),c410(x))
+    return q(h,v,wing.chord(x)**2,c40(x)) + a * 1/10 * q(h,v,wing.chord(x)**2,c410(x))
 
 #approximates the data as a polynomial in third degree (chosen based on trial and error)
 def curveFit(v = 10,a = 1.75,h = 0, function = normalAeroForce, plot = False):
