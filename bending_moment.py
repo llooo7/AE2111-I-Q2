@@ -70,11 +70,11 @@ def integrate_spline(n=1, mass=320000, v=10, h=1, a=0, CLd=0):
     for i in range(0, int(L*1000)):
         if i == int(engine_ypos*1000):
             #y_load___ = np.append(y_load___, float(isa.getDensity(h))*normal_force(i/1000, a)/2*v*v*chord(i/1000) + n*(- engine_weight - wing_load_dist(i/1000)))
-            y_load___ = np.append(y_load___, aeroforces.normalAeroForce(i/1000, v, a, h, CLd) + n*(- engine_weight - wing_load_dist(i/1000)))
+            y_load___ = np.append(y_load___, 1.5*aeroforces.normalAeroForce(i/1000, v, a, h, CLd) + n*(- engine_weight - wing_load_dist(i/1000)))
             y_load___other = np.append(y_load___other, - engine_weight - wing_load_dist(i/1000))
         else:
             #y_load___ = np.append(y_load___, float(isa.getDensity(h))*normal_force(i/1000, a)/2*v*v*chord(i/1000) + n*(- wing_load_dist(i/1000)))
-            y_load___ = np.append(y_load___, aeroforces.normalAeroForce(i/1000, v, a, h, CLd) + n*(- wing_load_dist(i/1000)))
+            y_load___ = np.append(y_load___, 1.5*aeroforces.normalAeroForce(i/1000, v, a, h, CLd) + n*(- wing_load_dist(i/1000)))
             y_load___other = np.append(y_load___other, - wing_load_dist(i/1000))
         x_load___ = np.append(x_load___, i/1000)
 

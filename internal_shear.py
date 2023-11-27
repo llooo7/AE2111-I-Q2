@@ -88,14 +88,15 @@ shearmax = shear[idx1]
 shearmin = shear[idx2]
 
 
-plt.plot(span, shearmax, color = 'red')
-plt.plot(span, shearmin, color = 'red')
+plt.plot(span, shearmax, color = 'red',label='n = 2.5')
+plt.plot(span, shearmin, color = 'blue',label='n=-1')
     
 plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
 plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 plt.xlim(0,12.815)
-plt.xlabel('y')
-plt.ylabel('I')
+plt.xlabel('y [m]')
+plt.ylabel('Shear Force [N]')
+plt.legend(loc='upper right')
 plt.grid(True)
 
 plt.show()

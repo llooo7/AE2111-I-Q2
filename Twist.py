@@ -66,8 +66,8 @@ Theta_min = np.array(twist(span,g))*180/np.pi
 
 plt.plot(span, Theta_max,color = 'r',label='n = 2.5')
 plt.plot(span, Theta_min, color = 'b',label='n = -1')
-plt.xlabel('y')
-plt.ylabel('I')
+plt.xlabel('y [m]')
+plt.ylabel('Twist [deg]')
 plt.title('Span-wise Wing Twist')
 plt.grid(True)
 plt.ylim(-11,11)

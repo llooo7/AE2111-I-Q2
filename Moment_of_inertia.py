@@ -131,8 +131,8 @@ I_2 = a*span**4 + b*span**3 + c*span**2 + d*span + e
 
 plt.plot(span, I)
 plt.plot(span, I_2)
-plt.xlabel('y')
-plt.ylabel('I')
+plt.xlabel('y [m]')
+plt.ylabel('I [kgm^2]')
 plt.title('Span-wise moment of Inertia')
 
 plt.show()
