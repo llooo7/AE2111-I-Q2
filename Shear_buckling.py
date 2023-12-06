@@ -13,7 +13,8 @@ v = 0.3333333333333333
 E = 69*10**9
 
 def torsion_stress(c,t_spar,t_skin,n_str_top,n_str_bot,A_str,T):
-     return T/(2*area_enclosed(c, t_spar, t_skin, n_str_top, n_str_bot, A_str))/t_spar
+     A,left,right,height,bottom = area_enclosed(c, t_spar, t_skin, n_str_top, n_str_bot, A_str)
+     return T/(2*A*t_spar)
     
 def critical_stress(ks,E,b,v,t_spar):
     return (np.pi**2*ks*E)/(1-v**2)/12*(t_spar/b)**2
@@ -33,9 +34,11 @@ def shear_buckling(t_spar, t_skin, n_str_top, n_str_bot, A_str,t_sparc,t_skinc,n
         A1,A2,A3,A4,height,left,right,bottom = area_section(i, t_spar, t_skin, n_str_top, n_str_bot, A_str)
         V = shearmax[p]
         T = torquemax[p]
+
         stress_avg = V/(left*t_spar+right*t_spar)
-        stress_max = stress_avg*kv + torsion_stress(i, t_spar, t_skin, n_str_top, n_str_bot, A_str, T)
-              
+        torsion = torsion_stress(i, t_spar, t_skin, n_str_top, n_str_bot, A_str, T)
+        stress_max = stress_avg*kv + torsion
+
         p+=1
         stress.append(stress_max)
         
@@ -53,7 +56,7 @@ def safety_margin(f,y):
 safety1 = []
 safety2 = []
 
-for tspar,tskin,astr,nstrtop,nstrbot,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl,t_sparcl,t_skincl,n_str_topcl,n_str_botcl):
+for tspar,tskin,nstrtop,nstrbot,astr,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl,t_sparcl,t_skincl,n_str_topcl,n_str_botcl):
     
     stress = shear_buckling(tspar, tskin, nstrtop, nstrbot, astr, tsparc, tskinc, nstrtopc, nstrbotc)
     stress_cr1 = critical_stress(ks_front, E, b_front, v, t_spar)
@@ -65,7 +68,7 @@ for tspar,tskin,astr,nstrtop,nstrbot,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sp
     safety1.append(m1)
     safety2.append(m2)
 
-    
+
 l = 0    
 for i in safety1:
 
