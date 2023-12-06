@@ -33,5 +33,5 @@ def plot_skin_buckling(poisson, kc, E, t_b, M_x, M_y, I_xx, I_yy, I_xy, x, y):
         xtab = np.append(xtab, i/1000)
     ax.plot(xtab, ytab)
     plt.show()
-print(skin_stress(M_x = 1, M_y = 1,I_xx = 2, I_yy = 1, I_xy = 1,x = 1/1000,y = 1))
+    
 plot_skin_buckling(poisson = 0.3, kc = 5, E = 69*(10**9), t_b = 0.002, M_x = 1, M_y = 1,I_xx = 2, I_yy = 1, I_xy = 1,x = 1,y = 1)
