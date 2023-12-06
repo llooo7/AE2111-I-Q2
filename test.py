@@ -11,13 +11,17 @@ left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
 span = np.arange(0,12.815,0.001)
-t_spar = 0.004
+t_spar = 0.015
 t_skin = 0.002
-A_str = 0.0005
-n_str_top = 2
-n_str_bottom = 2
+A_str = 0.00022
+n_str_top = 15
+n_str_bottom = 15
 E = 68.94757*10**9
 rho = 2700
+n_str_topc = 4
+n_str_botc = 4
+t_sparc = 0.003
+t_skinc = 0.001
 
 
 
@@ -68,7 +72,12 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
     change = chords[9500]
     
     for i in chords:
-  
+        if i <= change:
+            t_spar = t_sparc
+            t_skin = t_skinc
+            n_str_top = n_str_topc
+            n_str_bot = n_str_botc
+
         Atop,Aleft,Aright,Abottom,height,left,right,bottom = area(i,t_spar,t_skin)
 
         c_x = (left**2 + right**2 + left*right)/(3*(left+right))
@@ -108,33 +117,18 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
 
 
 
-I,m = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
+L,P = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
 
 
-a,b,c,d,e = np.polyfit(span,I,4)
+a,b,c,d,e = np.polyfit(span,L,4)
 
 I_2 = a*span**4 + b*span**3 + c*span**2 + d*span + e
 
-a1,b1 = np.polyfit(span,m,1)
+a1,b1 = np.polyfit(span,P,1)
 
 def mass(y):
     return a1*y + b1
 
 result, error = sp.integrate.quad(mass, 0, 12.815)
 
-print(result)
-print(a1,b1)
-plt.plot(span,m)
-plt.xlabel('y [m]')
-plt.ylabel('m [kg/m]')
-plt.title('Span-wise mass distribution of the wing box [kg/m]')
-plt.grid(True)
-plt.show()
-plt.plot(span, I)
-plt.plot(span, I_2)
-plt.xlabel('y [m]')
-plt.ylabel('I [m^4]')
-plt.title('Span-wise moment of Inertia in [m^4]')
-plt.grid(True)
 
-plt.show()

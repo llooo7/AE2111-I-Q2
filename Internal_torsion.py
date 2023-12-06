@@ -20,8 +20,8 @@ plt.show()
 
 plt.show()
 
-n_crit_max = n_values1[idx1]
-n_crit_min = n_values1[idx2]
+n_crit_max = n_values[idx1]
+n_crit_min = n_values[idx2]
 
 torquemax = torsion[idx1]
 torquemin = torsion[idx2]

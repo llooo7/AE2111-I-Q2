@@ -13,6 +13,7 @@ h,i,j,k,l,m,n,o = np.polyfit(span,torquemax,7)
 p,q,r,s,t,u,v1,w1 = np.polyfit(span, torquemin, 7)
 
 
+
 def torsion_max(y):
     return (h*y**7 + i*y**6 + j*y**5 +k*y**4 + l*y**3 + m*y**2 + n*y + o)
 
@@ -23,7 +24,11 @@ def torsional_constant(n_str_top,n_str_bottom,A_str,t_spar,t_skin):
     
     chords = chord_length(span)
     J = []
+    t1 = []
+    change = chords[10000]
+    
     for i in chords:
+
         
         A1,A2,A3,A4,height,left,right,bottom = area(i,t_spar,t_skin)
         
@@ -37,7 +42,7 @@ def torsional_constant(n_str_top,n_str_bottom,A_str,t_spar,t_skin):
         
     return J
         
-        
+     
 J = torsional_constant(n_str_top,n_str_bottom,A_str,t_spar, t_skin)
 
 
@@ -63,10 +68,16 @@ def twist(span,function):
 Theta_max = np.array(twist(span,f))*180/np.pi
 Theta_min = np.array(twist(span,g))*180/np.pi
 
+plt.plot(span,J)
+plt.grid(True)
+plt.xlabel('y [m]')
+plt.ylabel('Torsional Constant [m^4]')
+plt.title('Span-wise variation of the torsional constant in [m^4]')
+plt.show()
 
 plt.plot(span, Theta_max,color = 'r',label='n = 2.5')
 plt.plot(span, Theta_min, color = 'b',label='n = -1')
-print(J[0])
+
 plt.xlabel('y [m]')
 plt.ylabel('Twist [deg]')
 plt.title('Span-wise Wing Twist for n = -1 and n = 2.5')

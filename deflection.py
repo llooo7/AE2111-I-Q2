@@ -10,6 +10,8 @@ h,i,j,k,l,m = np.polyfit(span, momentmax, 5)
 p,q,r,s,t,u = np.polyfit(span, momentmin, 5)
 
 
+
+
 def moment_maxfunction(y):
     return (h*y**5 + i*y**4 + j*y**3 +k*y**2 + l*y + m)
 
