@@ -1,17 +1,18 @@
 from math import pi
 from matplotlib import pyplot as plt
 import numpy as np
+import Internal_moment
 
 poisson = 0.3
 kc = 5
 E = 69*(10**9)
 t_b = 0.002
 
-M_x = 1
-M_y = 1
+M_x = Internal_moment.momentmin
+M_y = 0
 I_xx = 2
 I_yy = 1
-I_xy = 1
+I_xy = 0
 x = 1
 y = 1
 
