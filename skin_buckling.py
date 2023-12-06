@@ -18,33 +18,32 @@ l_str = 0.001
 M_x = momentmin
 I_xx = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,t_str,l_str)[0]
 span = np.arange(0,12.815,0.001)
-a,b,c,d,e = np.polyfit(span,I_xx,4)
-I_xx = a*span**4 + b*span**3 + c*span**2 + d*span + e
+I_xx = np.polyval(I_xx, span)
 
 
-z = 1 #insert height of the skin panel
+#insert height of the skin panel
 
 def t_b(y):
     return (t_skin/(area(chord_length(y), 1, 1)[4]))
 
 
-def skin_buckling_crit(poisson, kc, E, t_b):
-    return (((pi**2*kc*E)/(12*(1-poisson**2)))*(t_b**2))
+def skin_buckling_crit(poisson, kc, E, y):
+    return (((pi**2*kc*E)/(12*(1-poisson**2)))*(t_b(y)**2))
 
 
-def skin_stress(M_x, I_xx, z):
-    return (((M_x)*z)/(I_xx))
+def skin_stress(M_x, I_xx, y):
+    return (((-M_x[int(y*1000)])*0.052700*chord_length(y))/(I_xx[int(y*1000)]))
 
 def safety_margin(a, b):
     return (a/b)
 
-def plot_skin_buckling(poisson, kc, E, t_b, M_x, I_xx, z):
+def plot_skin_buckling(poisson, kc, E, M_x, I_xx):
     fig, ax = plt.subplots()
-    ytab = [safety_margin(skin_buckling_crit(poisson, kc, E, t_b(y/1000)), skin_stress(M_x(y/1000), I_xx(y/1000), z)) for y in range(1, 12815)]
-    xtab = np.array([])
-    for i in range (1, 12815):
-        xtab = np.append(xtab, i/1000)
+    xtab = np.arange(0, 12000)/1000
+    #ytab = [safety_margin(skin_buckling_crit(poisson, kc, E, y), skin_stress(M_x, I_xx, y)) for y in xtab]
+    ytab = [skin_buckling_crit(poisson, kc, E, y) for y in xtab]
+    ax.plot(xtab, ytab)
+    ytab = [skin_stress(M_x, I_xx, y) for y in xtab]
     ax.plot(xtab, ytab)
     plt.show()
-    
-plot_skin_buckling(poisson, kc, E, t_b, M_x, I_xx, z)
+plot_skin_buckling(poisson, kc, E, M_x, I_xx)
