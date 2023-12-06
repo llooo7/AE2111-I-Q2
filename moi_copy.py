@@ -11,11 +11,7 @@ left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
 span = np.arange(0,12.815,0.001)
-t_spar = 0.004
-t_skin = 0.002
-A_str = 0.0005
-n_str_top = 2
-n_str_bottom = 2
+
 E = 68.94757*10**9
 rho = 2700
 front = []
@@ -61,21 +57,26 @@ def area(c,t_spar,t_skin):
     return A1,A2,A3,A4,height,left,right,bottom
 
 
-def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
+def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,t_sparc,t_skinc,n_str_topc,n_str_botc):
     
     chords = chord_length(span)
     moment_of_inertia = []
     mass_dist = []
     change = chords[9500]
-
+    centroid = []
     for i in chords:
+        if i <= change:
+            t_spar = t_sparc
+            t_skin = t_skinc
+            n_str_top = n_str_topc
+            n_str_bot = n_str_botc
   
         Atop,Aleft,Aright,Abottom,height,left,right,bottom = area(i,t_spar,t_skin)
         front.append(left)
         back.append(right)
         c_x = (left**2 + right**2 + left*right)/(3*(left+right))
         c_y = (left+2*right)/(3*(left+right))*height
-        
+        centroid.append(c_x)
         distance_top = c_x
         distance_bottom = left - np.sqrt((bottom/2)**2/(1+(height/(left-right))**2)) - c_x
         distance_left = left/2 - c_x
@@ -106,11 +107,11 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
         area_tot = Atop + Aleft + Abottom + Aright + (n_str_top + n_str_bottom)*A_str
         m_dist = area_tot*rho
         mass_dist.append(m_dist)
-    return moment_of_inertia,mass_dist
+    return moment_of_inertia,mass_dist,centroid
 
 
 
-I,m = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
+"""I,m = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
 
 
 a,b,c,d,e = np.polyfit(span,I,4)
@@ -135,6 +136,6 @@ plt.plot(span, I_2)
 plt.xlabel('y [m]')
 plt.ylabel('I [m^4]')
 plt.title('Span-wise moment of Inertia in [m^4]')
-plt.grid(True)
+plt.grid(True)"""
 
 

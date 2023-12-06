@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
-
+from useful_functions import *
 
 thickness_chord = 0.14
 start_point = 0.288
@@ -11,18 +11,9 @@ left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
 span = np.arange(0,12.815,0.001)
-t_spar = 0.015
-t_skin = 0.002
-A_str = 0.00022
-n_str_top = 15
-n_str_bottom = 15
+
 E = 68.94757*10**9
 rho = 2700
-n_str_topc = 4
-n_str_botc = 4
-t_sparc = 0.003
-t_skinc = 0.001
-
 
 
 def chord_length(y):
@@ -64,13 +55,13 @@ def area(c,t_spar,t_skin):
     return A1,A2,A3,A4,height,left,right,bottom
 
 
-def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
+def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,n_str_topc,n_str_botc,t_sparc,t_skinc):
     
     chords = chord_length(span)
     moment_of_inertia = []
     mass_dist = []
     change = chords[9500]
-    
+    centroid = []
     for i in chords:
         if i <= change:
             t_spar = t_sparc
@@ -82,7 +73,7 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
 
         c_x = (left**2 + right**2 + left*right)/(3*(left+right))
         c_y = (left+2*right)/(3*(left+right))*height
-        
+        centroid.append(c_x)
         distance_top = c_x
         distance_bottom = left - np.sqrt((bottom/2)**2/(1+(height/(left-right))**2)) - c_x
         distance_left = left/2 - c_x
@@ -113,22 +104,19 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
         area_tot = Atop + Aleft + Abottom + Aright + (n_str_top + n_str_bottom)*A_str
         m_dist = area_tot*rho
         mass_dist.append(m_dist)
-    return moment_of_inertia,mass_dist
+    return moment_of_inertia,mass_dist,centroid
 
+I_lst = []
+for tspar,tskin,nstrtop,nstrbot,astr,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl,t_sparcl,t_skincl,n_str_topcl,n_str_botcl):
+    I,m,cx = moment_of_inertia(astr, nstrtop, nstrbot, tspar, tskin, nstrtopc, nstrbotc, tsparc, tskinc)
+    I_lst.append(I)
+    plt.plot(span,I)
+    a1,b1 = np.polyfit(span,m,1)
 
+    def mass(y):
+        return a1*y + b1
 
-L,P = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
+    result, error = sp.integrate.quad(mass, 0, 12.815)
 
-
-a,b,c,d,e = np.polyfit(span,L,4)
-
-I_2 = a*span**4 + b*span**3 + c*span**2 + d*span + e
-
-a1,b1 = np.polyfit(span,P,1)
-
-def mass(y):
-    return a1*y + b1
-
-result, error = sp.integrate.quad(mass, 0, 12.815)
-
-
+    print(result)
+plt.show()

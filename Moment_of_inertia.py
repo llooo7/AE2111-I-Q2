@@ -60,8 +60,8 @@ def area(c,t_spar,t_skin):
     A2 = left*t_spar
     A3 = right*t_spar
     A4 = bottom*t_skin
-    front.append(left)
-    back.append(right)
+    front.append(height)
+    back.append(bottom)
     return A1,A2,A3,A4,height,left,right,bottom
 
 
@@ -72,14 +72,14 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,t_str,l_str):
     mass_dist = []
     change = chords[9500]
     h_str = (A_str-l_str*t_str)/t_str
-
+    centroid = []
     for i in chords:
   
         Atop,Aleft,Aright,Abottom,height,left,right,bottom = area(i,t_spar,t_skin)
 
         c_x = (left**2 + right**2 + left*right)/(3*(left+right))
         c_y = (left+2*right)/(3*(left+right))*height
-        
+        centroid.append(c_x)
         distance_top = c_x
         distance_bottom = left - np.sqrt((bottom/2)**2/(1+(height/(left-right))**2)) - c_x
         distance_left = left/2 - c_x
@@ -110,11 +110,11 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,t_str,l_str):
         area_tot = Atop + Aleft + Abottom + Aright + (n_str_top + n_str_bottom)*A_str
         m_dist = area_tot*rho
         mass_dist.append(m_dist)
-    return moment_of_inertia,mass_dist
+    return moment_of_inertia,mass_dist,centroid
 
 
 
-I,m = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,t_str,l_str)
+I,m,centroid = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,t_str,l_str)
 
 
 a,b,c,d,e = np.polyfit(span,I,4)

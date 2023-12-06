@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
-from Internal_torsion import *
+
 
 
 thickness_chord = 0.14
@@ -16,15 +16,17 @@ b_front = 0.376666544
 b_back = 0.35126654399999996
 
 t_sparl = [0.015,0.01,0.017]
-t_skinl = [0.002,0.001,0.001]
+t_skinl = [0.002,0.001,0.002]
 A_strl = [0.0005,0.0005,0.00022]
-n_str_topl = [6,12,17]
-n_str_botl = [6,12,17]
-t_sparcl = [0.015,0.01,0.0]
+n_str_topl = [6,12,15]
+n_str_botl = [6,12,15]
+t_sparcl = [0.015,0.01,0.003]
 t_skincl = [0.002,0.001,0.001]
-n_str_topcl = [6,12,17]
-n_str_botcl = [6,12,17]
+n_str_topcl = [6,12,4]
+n_str_botcl = [6,12,4]
 
+b_top = 1.7969480351999998
+b_bottom = 1.797201170322717
 
 
 def chord_length(y):
@@ -78,7 +80,7 @@ def area_enclosed(c,t_spar,t_skin,n_str_top,n_str_bot,A_str):
     A = 0.5*(left+right)*height+A_str*(n_str_top+n_str_bot)
     return A,left,right,height,bottom
 
-
+a = np.sqrt((wingbox_height(0)-wingbox_height(12.815))**2 + 12.815**2)
 
     
     

@@ -7,8 +7,8 @@ from internal_shear import *
 from Internal_torsion import *
 
 kv = 1.5
-ks_front = 9.5
-ks_back = 9.5
+ks_front = 9.5*3
+ks_back = 9.5*3
 v = 0.3333333333333333
 E = 69*10**9
 
@@ -22,8 +22,9 @@ def critical_stress(ks,E,b,v,t_spar):
 def shear_buckling(t_spar, t_skin, n_str_top, n_str_bot, A_str,t_sparc,t_skinc,n_str_topc,n_str_botc):
     chords = chord_length(span1)
     stress = []
-    change = chord_length(9500)
+    change = chords[9500]
     p = 0
+    s = []
     for i in chords:
         if i <= change:
             t_spar = t_sparc
@@ -39,9 +40,11 @@ def shear_buckling(t_spar, t_skin, n_str_top, n_str_bot, A_str,t_sparc,t_skinc,n
         torsion = torsion_stress(i, t_spar, t_skin, n_str_top, n_str_bot, A_str, T)
         stress_max = stress_avg*kv + torsion
 
-        p+=1
+        s.append(t_spar)
         stress.append(stress_max)
-        
+        p+=1
+    plt.plot(span1,s)
+    plt.show()
     return stress
         
 def safety_margin(f,y):
