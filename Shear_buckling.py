@@ -9,7 +9,7 @@ from Internal_torsion import *
 kv = 1.5
 ks_front = 9.5
 ks_back = 9.5
-v = 0.3
+v = 0.3333333333333333
 E = 69*10**9
 
 def torsion_stress(c,t_spar,t_skin,n_str_top,n_str_bot,A_str,T):
