@@ -20,7 +20,8 @@ n_str_top = 2
 n_str_bottom = 2
 E = 68.94757*10**9
 rho = 2700
-
+front = []
+back = []
 
 
 def chord_length(y):
@@ -59,6 +60,8 @@ def area(c,t_spar,t_skin):
     A2 = left*t_spar
     A3 = right*t_spar
     A4 = bottom*t_skin
+    front.append(left)
+    back.append(right)
     return A1,A2,A3,A4,height,left,right,bottom
 
 

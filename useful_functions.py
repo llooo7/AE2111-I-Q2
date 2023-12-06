@@ -11,18 +11,19 @@ end_point = 0.9
 left_side = 0.052700 + 0.052900
 right_side = 0.051600 + 0.028600
 height = end_point - start_point
-span = np.arange(0,12.815,0.001)
+span1 = np.arange(0,12.000,0.001)
+b_front = 0.376666544
+b_back = 0.35126654399999996
 
-
-t_spar = [0.015,0.01,0.017]
-t_skin = [0.002,0.001,0.001]
-A_str = [0.0005,0.0005,0.00022]
-n_str_top = [6,12,17]
-n_str_bot = [6,12,17]
-t_sparc = [0.015,0.01,0.0]
-t_skinc = [0.002,0.001,0.001]
-n_str_topc = [6,12,17]
-n_str_botc = [6,12,17]
+t_sparl = [0.015,0.01,0.017]
+t_skinl = [0.002,0.001,0.001]
+A_strl = [0.0005,0.0005,0.00022]
+n_str_topl = [6,12,17]
+n_str_botl = [6,12,17]
+t_sparcl = [0.015,0.01,0.0]
+t_skincl = [0.002,0.001,0.001]
+n_str_topcl = [6,12,17]
+n_str_botcl = [6,12,17]
 
 
 
@@ -63,6 +64,7 @@ def area_section(c,t_spar,t_skin,n_str_top,n_str_bot,A_str):
     A2 = left*t_spar
     A3 = right*t_spar
     A4 = bottom*t_skin
+
     return A1,A2,A3,A4,height,left,right,bottom
 
 def area_enclosed(c,t_spar,t_skin,n_str_top,n_str_bot,A_str):
@@ -73,8 +75,8 @@ def area_enclosed(c,t_spar,t_skin,n_str_top,n_str_bot,A_str):
     height = 0.9*c - 0.288*c
     bottom = np.sqrt((left-right)**2+height**2)
 
-    A = 0.5*(left+right)*height+A_str*(n_str_top+n_str_bottom)
-    return A
+    A = 0.5*(left+right)*height+A_str*(n_str_top+n_str_bot)
+    return A,left,right,height,bottom
 
 
 
