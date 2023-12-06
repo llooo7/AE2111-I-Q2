@@ -5,13 +5,13 @@ from Internal_moment import momentmin
 from Moment_of_inertia import moment_of_inertia, area, chord_length
 
 poisson = 0.3
-kc = 5
+kc = 7
 E = 68.94757*10**9
 A_str = 0.0005
 n_str_top = 2
 n_str_bottom =  2
 t_spar = 0.004
-t_skin = 0.002
+t_skin = 0.02
 t_str = 0.0005
 l_str = 0.001
 
@@ -32,18 +32,18 @@ def skin_buckling_crit(poisson, kc, E, y):
 
 
 def skin_stress(M_x, I_xx, y):
-    return (((-M_x[int(y*1000)])*0.052700*chord_length(y))/(I_xx[int(y*1000)]))
+    return (((-M_x[int(round(y*100))])*0.052700*chord_length(y))/(I_xx[int(round(y*100))]))
 
 def safety_margin(a, b):
     return (a/b)
 
 def plot_skin_buckling(poisson, kc, E, M_x, I_xx):
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(2, 1)
     xtab = np.arange(0, 12000)/1000
     #ytab = [safety_margin(skin_buckling_crit(poisson, kc, E, y), skin_stress(M_x, I_xx, y)) for y in xtab]
     ytab = [skin_buckling_crit(poisson, kc, E, y) for y in xtab]
-    ax.plot(xtab, ytab)
+    ax[0].plot(xtab, ytab)
     ytab = [skin_stress(M_x, I_xx, y) for y in xtab]
-    ax.plot(xtab, ytab)
+    ax[1].plot(xtab, ytab)
     plt.show()
 plot_skin_buckling(poisson, kc, E, M_x, I_xx)
