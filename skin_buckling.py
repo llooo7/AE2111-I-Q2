@@ -20,8 +20,8 @@ def skin_buckling_crit(poisson, kc, E, t_b):
     return (((pi**2*kc*E)/(12*(1-poisson**2)))*(t_b**2))
 
 
-def skin_stress(M_x, M_y, I_xx, I_yy, I_xy, x, y):
-    return (((M_x*I_yy-M_y*I_xy)*y+(M_y*I_xx-M_x*I_xy)*x)/(I_xx*I_yy-I_xy**2))
+def skin_stress(M_x, I_xx, y):
+    return (((M_x)*y)/(I_xx))
 
 def safety_margin(a, b):
     return (a/b)
