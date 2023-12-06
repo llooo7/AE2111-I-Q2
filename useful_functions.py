@@ -75,7 +75,7 @@ def area_enclosed(c,t_spar,t_skin,n_str_top,n_str_bot,A_str):
     height = 0.9*c - 0.288*c
     bottom = np.sqrt((left-right)**2+height**2)
 
-    A = 0.5*(left+right)*height+A_str*(n_str_top+n_str_bottom)
+    A = 0.5*(left+right)*height+A_str*(n_str_top+n_str_bot)
     return A,left,right,height,bottom
 
 
