@@ -13,7 +13,10 @@ height = end_point - start_point
 span = np.arange(0,12.815,0.001)
 t_spar = 0.004
 t_skin = 0.002
-A_str = 0.0005
+t_str= 0.002
+l_str=0.02
+h_str=0.02
+A_str = t_str*h_str+t_str*l_str
 n_str_top = 2
 n_str_bottom = 2
 E = 68.94757*10**9
@@ -43,7 +46,7 @@ def stringer(left,right,top,bottom,n_str_top,n_str_bottom):
         
     
     return str_top,str_bottom
-    
+
   
 
 def area(c,t_spar,t_skin):
@@ -60,7 +63,7 @@ def area(c,t_spar,t_skin):
     return A1,A2,A3,A4,height,left,right,bottom
 
 
-def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
+def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,t_str,h_str):
     
     chords = chord_length(span)
     moment_of_inertia = []
@@ -83,13 +86,13 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin):
         for j in b:
             
             dist = left - c_x - j
-            steiner = A_str*dist**2
-            I_str_bottom.append(steiner)
+            stringer_mom =1/12*h_str**3*t_str+A_str*(dist-(h_str/2))**2
+            I_str_bottom.append(stringer_mom)
 
         
         I_str_bottom = sum(I_str_bottom)
 
-        I_str_top = n_str_top*A_str*distance_top**2
+        I_str_top = n_str_top*A_str*(distance_top-(h_str/2))**2
 
         I_top = 1/12*height*t_skin**3 + Atop*distance_top**2
         I_left = 1/12*t_spar*left**3 + Aleft*distance_left**2
