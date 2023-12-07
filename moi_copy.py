@@ -111,7 +111,7 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,t_sparc,t_skinc
 
 
 
-"""I,m = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
+I,m = moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin)
 
 
 a,b,c,d,e = np.polyfit(span,I,4)
@@ -136,6 +136,6 @@ plt.plot(span, I_2)
 plt.xlabel('y [m]')
 plt.ylabel('I [m^4]')
 plt.title('Span-wise moment of Inertia in [m^4]')
-plt.grid(True)"""
+plt.grid(True)
 
 

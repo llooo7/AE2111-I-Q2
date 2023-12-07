@@ -55,13 +55,14 @@ def area(c,t_spar,t_skin):
     return A1,A2,A3,A4,height,left,right,bottom
 
 
-def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,n_str_topc,n_str_botc,t_sparc,t_skinc):
+def moment_of_inertia(A_str,l_str,n_str_top,n_str_bottom,t_spar,t_skin,n_str_topc,n_str_botc,t_sparc,t_skinc):
     
     chords = chord_length(span)
     moment_of_inertia = []
     mass_dist = []
     change = chords[9500]
     centroid = []
+    t_str = A_str/2/l_str
     for i in chords:
         if i <= change:
             t_spar = t_sparc
@@ -83,8 +84,8 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,n_str_topc,n_st
         for j in b:
             
             dist = left - c_x - j
-            steiner = A_str*dist**2
-            I_str_bottom.append(steiner)
+            stringer_moi = 1/12*l_str**3*t_str + A_str*(dist-l_str/2)**2
+            I_str_bottom.append(stringer_moi)
 
         
         I_str_bottom = sum(I_str_bottom)
@@ -107,8 +108,8 @@ def moment_of_inertia(A_str,n_str_top,n_str_bottom,t_spar,t_skin,n_str_topc,n_st
     return moment_of_inertia,mass_dist,centroid
 
 I_lst = []
-for tspar,tskin,nstrtop,nstrbot,astr,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl,t_sparcl,t_skincl,n_str_topcl,n_str_botcl):
-    I,m,cx = moment_of_inertia(astr, nstrtop, nstrbot, tspar, tskin, nstrtopc, nstrbotc, tsparc, tskinc)
+for tspar,tskin,nstrtop,nstrbot,astr,lstr,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl,l_strl,t_sparcl,t_skincl,n_str_topcl,n_str_botcl):
+    I,m,cx = moment_of_inertia(astr,lstr,nstrtop, nstrbot, tspar, tskin, nstrtopc, nstrbotc, tsparc, tskinc)
     I_lst.append(I)
     plt.plot(span,I)
     a1,b1 = np.polyfit(span,m,1)

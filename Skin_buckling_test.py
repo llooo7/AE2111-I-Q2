@@ -7,8 +7,8 @@ from Internal_moment import *
 from test import *
 
 
-ks_top = 7.5*3
-ks_bottom = 7.5*3
+ks_top = 7.5
+ks_bottom = 7.5
 v = 0.3333333333333333
 E = 69*10**9
 b_top = 1.7969480351999998
@@ -17,8 +17,11 @@ l_str = 0.105
 t_str = 0.02
 critical_stress1 = 241*10**6
     
-def critical_stress(ks,E,b,v,t_skin):
-    return (np.pi**2*ks*E)/(1-v**2)/12*(t_skin/b)**2
+def critical_stress(ks,E,b,v,t_skin,ntop,nbot,lstr,h,l,r,bot):
+    
+    b_t = b/2 - (ntop+nbot)*lstr/2
+
+    return (np.pi**2*ks*E)/(1-v**2)/12*(t_skin/b_t)**2
 
 def skin_buckling(t_spar, t_skin, n_str_top, n_str_bot, A_str,t_sparc,t_skinc,n_str_topc,n_str_botc):
     chords = chord_length(span1)
@@ -47,7 +50,7 @@ def skin_buckling(t_spar, t_skin, n_str_top, n_str_bot, A_str,t_sparc,t_skinc,n_
         stress4.append(stress_bottom1)      
         p+=1
 
-    return stress1,stress2,stress3,stress4
+    return stress1,stress2,stress3,stress4,height,left,right,bottom
         
 def safety_margin(f,y):
     margin = []
@@ -63,12 +66,12 @@ safety2 = []
 safety3 = []
 safety4 = []
 check = 0
-for tspar,tskin,nstrtop,nstrbot,astr,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl,t_sparcl,t_skincl,n_str_topcl,n_str_botcl):
+for tspar,tskin,nstrtop,nstrbot,astr,lstr,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl,l_strl,t_sparcl,t_skincl,n_str_topcl,n_str_botcl):
     
-    stress1,stress2,stress3,stress4 = skin_buckling(tspar, tskin, nstrtop, nstrbot, astr, tsparc, tskinc, nstrtopc, nstrbotc)
-    stress_cr1 = critical_stress(ks_top, E, b_top, v, t_skin)
-    print(stress_cr1)
-    stress_cr2 = critical_stress(ks_bottom, E, b_bottom, v, t_skin)
+    stress1,stress2,stress3,stress4,h,l,r,b = skin_buckling(tspar, tskin, nstrtop, nstrbot, astr, tsparc, tskinc, nstrtopc, nstrbotc)
+    stress_cr1 = critical_stress(ks_top, E, b_top, v, t_skin,nstrtop,nstrbot,lstr,h,l,r,b)
+
+    stress_cr2 = critical_stress(ks_bottom, E, b_bottom, v, t_skin,nstrtop,nstrbot,lstr,h,l,r,b)
     m1 = safety_margin(stress1, stress_cr1)
     m2 = safety_margin(stress2, stress_cr2)
     m3 = safety_margin(stress3, critical_stress1)
@@ -158,7 +161,7 @@ plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 plt.ylim(0,10.5)
 plt.xlabel('y [m]')
 plt.ylabel('Shear Force [N]')
-plt.legend(loc='upper right')
+plt.legend(loc='upper left')
 plt.title('Internal Shear Force for n = -1 and n = 2.5')
 
 plt.grid(True)
@@ -185,7 +188,7 @@ plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 plt.ylim(0,10.5)
 plt.xlabel('y [m]')
 plt.ylabel('Shear Force [N]')
-plt.legend(loc='upper right')
+plt.legend(loc='upper left')
 plt.title('Internal Shear Force for n = -1 and n = 2.5')
 
 plt.grid(True)

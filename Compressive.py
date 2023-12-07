@@ -15,7 +15,7 @@ def compressive(t_spar, t_skin, n_str_top, n_str_bot, A_str):
     stress2 = []
     stress3 = []
     stress4 = []
-    stress5 = []
+
 
     for i in chords: 
         A1,A2,A3,A4,height,left,right,bottom = area_section(i, t_spar, t_skin, n_str_top, n_str_bot, A_str)
@@ -25,14 +25,14 @@ def compressive(t_spar, t_skin, n_str_top, n_str_bot, A_str):
         S2 = N/A2
         S3 = N/A3
         S4 = N/A4
-        S5 = N/A_str       
+    
         stress1.append(S1)
         stress2.append(S2)
         stress3.append(S3)
         stress4.append(S4)
-        stress5.append(S5)
+
         
-    return stress1,stress2,stress3,stress4,stress5
+    return stress1,stress2,stress3,stress4
         
 def safety_margin(f,y):
     margin = []
@@ -47,24 +47,24 @@ safety1 = []
 safety2 = []
 safety3 = []
 safety4 = []
-safety5 = []
+
 
 for tspar,tskin,nstrtop,nstrbot,astr in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl):
     
-    s1,s2,s3,s4,s5 = compressive(tspar, tskin, nstrtop, nstrbot, astr)
+    s1,s2,s3,s4 = compressive(tspar, tskin, nstrtop, nstrbot, astr)
     
 
     m1 = safety_margin(s1,critical_stress)
     m2 = safety_margin(s2,critical_stress)
     m3 = safety_margin(s3,critical_stress)
     m4 = safety_margin(s4,critical_stress)
-    m5 = safety_margin(s5,critical_stress)
+
     
     safety1.append(m1)
     safety2.append(m2)
     safety3.append(m3)
     safety4.append(m4)
-    safety5.append(m5)
+
 
 l = 0    
 for i in safety1:
@@ -178,33 +178,7 @@ plt.grid(True)
 plt.show()
     
 
-t2 = 0
-for jooo in safety5:
 
-    if t2 == 0:
-        p2 = 'red'
-        q2 = 'Design option 1'
-    elif t2 == 1:
-        p2 = 'blue'
-        q2 = 'Design option 2'
-    elif t2 == 2:
-        p2 = 'green'
-        q2 = 'Design option 3'
-   
-    plt.plot(span2, jooo, color = p2,label=q2)
-    t2+=1
-    
-plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)  
-plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
-plt.xlim(0,0.4*12.815)
-plt.xlabel('y [m]')
-plt.ylabel('Shear Force [N]')
-plt.legend(loc='lower right')
-plt.title('Internal Shear Force for n = -1 and n = 2.5')
-
-plt.grid(True)
-
-plt.show()
         
     
     
