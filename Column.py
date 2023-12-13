@@ -25,6 +25,7 @@ def column(A_str,n_str_top,n_str_bot):
         stress.append(S)
         L = span2[p]
         p+=1
+
     return stress,L
         
 def safety_margin(f,y):

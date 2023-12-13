@@ -15,16 +15,16 @@ span1 = np.arange(0,12.000,0.001)
 b_front = 0.376666544
 b_back = 0.35126654399999996
 
-t_sparl = [0.015,0.01,0.017]
-t_skinl = [0.002,0.001,0.002]
-A_strl = [0.001,0.001,0.001]
-l_strl = [0.0526,0.0526,0.0536]
-n_str_topl = [6,12,15]
-n_str_botl = [6,12,15]
-t_sparcl = [0.015,0.01,0.003]
-t_skincl = [0.002,0.001,0.001]
-n_str_topcl = [6,12,4]
-n_str_botcl = [6,12,4]
+t_sparl = [0.015,0.013,0.017]
+t_skinl = [0.01,0.0085,0.0075]
+A_strl = [0.00155,0.00108,0.00085]
+l_strl = [0.16,0.08,0.065]
+n_str_topl = [8,15,21]
+n_str_botl = [8,15,21]
+t_sparcl = [0.015,0.013,0.017]
+t_skincl = [0.01,0.0085,0.0075]
+n_str_topcl = [8,15,5]
+n_str_botcl = [8,15,5]
 
 
 b_top = 1.7969480351999998
@@ -86,7 +86,8 @@ def area_enclosed(c,t_spar,t_skin,n_str_top,n_str_bot,A_str):
 
     
     
-    
+a = np.sqrt((wingbox_height(0)-wingbox_height(12.815))**2+12.815**2)
+
     
     
     

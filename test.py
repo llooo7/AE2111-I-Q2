@@ -63,12 +63,13 @@ def moment_of_inertia(A_str,l_str,n_str_top,n_str_bottom,t_spar,t_skin,n_str_top
     change = chords[9500]
     centroid = []
     t_str = A_str/2/l_str
+    tst = []
     for i in chords:
         if i <= change:
             t_spar = t_sparc
             t_skin = t_skinc
             n_str_top = n_str_topc
-            n_str_bot = n_str_botc
+            n_str_bottom = n_str_botc
 
         Atop,Aleft,Aright,Abottom,height,left,right,bottom = area(i,t_spar,t_skin)
 
@@ -103,21 +104,26 @@ def moment_of_inertia(A_str,l_str,n_str_top,n_str_bottom,t_spar,t_skin,n_str_top
         moment_of_inertia.append(I_tot)
         
         area_tot = Atop + Aleft + Abottom + Aright + (n_str_top + n_str_bottom)*A_str
+        tst.append(n_str_top)
         m_dist = area_tot*rho
         mass_dist.append(m_dist)
-    return moment_of_inertia,mass_dist,centroid
+    return moment_of_inertia,mass_dist,centroid,tst
 
 I_lst = []
 for tspar,tskin,nstrtop,nstrbot,astr,lstr,tsparc,tskinc,nstrtopc,nstrbotc in zip(t_sparl, t_skinl, n_str_topl, n_str_botl, A_strl,l_strl,t_sparcl,t_skincl,n_str_topcl,n_str_botcl):
-    I,m,cx = moment_of_inertia(astr,lstr,nstrtop, nstrbot, tspar, tskin, nstrtopc, nstrbotc, tsparc, tskinc)
+    I,m,cx,tst = moment_of_inertia(astr,lstr,nstrtop, nstrbot, tspar, tskin, nstrtopc, nstrbotc, tsparc, tskinc)
     I_lst.append(I)
-    plt.plot(span,I)
+    
+    
     a1,b1 = np.polyfit(span,m,1)
+   
 
     def mass(y):
         return a1*y + b1
 
     result, error = sp.integrate.quad(mass, 0, 12.815)
+    plt.plot(span,m)
+    plt.plot(span,mass(span))
+    plt.show()
 
     print(result)
-plt.show()
