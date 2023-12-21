@@ -57,6 +57,7 @@ find_rib_placing(ytab)
 rib_weighting(rib_placing)
 print(rib_placing)
 print(rib_weights)
+print(sum(rib_weights))
 
 plot_wing()
 
